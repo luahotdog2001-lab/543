@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>영어 배틀 아레나</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1923;--bg2:#162330;--card:#17232f;--fg:#ece8e1;--mut:#8d98a4;--ac:#ff4655;--ac2:#bd3944;--ok:#2bd9a0;--bad:#ff4655;--bd:#2c3b4a;--f:"Rajdhani","Noto Sans KR","Apple SD Gothic Neo",system-ui,sans-serif;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;color:var(--fg);font-family:var(--f);font-size:16px;min-height:100vh;background:linear-gradient(115deg,rgba(255,70,85,.10),transparent 38%),repeating-linear-gradient(135deg,rgba(255,255,255,.02) 0 2px,transparent 2px 14px),var(--bg)}
+body.hasbg{background:linear-gradient(rgba(15,25,35,.6),rgba(15,25,35,.9)),var(--bgimg) center/cover fixed}
+body.ingame{background:#000!important}
+.scr{max-width:1080px;margin:0 auto;padding:22px}
+.hide{display:none!important}
+h1{margin:10px 0 8px;font-size:84px;line-height:.9;font-weight:700;letter-spacing:.02em}
+h1 span{color:var(--ac)}
+h2{margin:6px 0 14px;font-size:28px;letter-spacing:.14em;border-left:5px solid var(--ac);padding-left:12px;font-weight:700}
+.tag{display:inline-block;background:var(--ac);color:#fff;padding:3px 14px 3px 10px;font-size:13px;letter-spacing:.2em;font-weight:700;clip-path:polygon(0 0,100% 0,calc(100% - 9px) 100%,0 100%)}
+.mut{color:var(--mut)}.small{font-size:13px}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.035),transparent 60%),var(--card);border:1px solid var(--bd);border-left:3px solid var(--ac);padding:16px;margin:12px 0}
+.lab{font-size:13px;letter-spacing:.22em;color:var(--mut);margin-bottom:10px;font-weight:700}
+input{width:100%;padding:11px 12px;border:1px solid var(--bd);background:#0b131b;color:var(--fg);font:600 17px var(--f);margin:4px 0 12px;outline:none}
+input:focus{border-color:var(--ac)}
+.row{display:flex;gap:8px;align-items:center}.row input{margin:0}
+.btn{display:block;width:100%;padding:13px 20px;border:0;background:var(--ac);color:#fff;font:700 18px var(--f);letter-spacing:.12em;cursor:pointer;margin:8px 0;clip-path:polygon(0 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%);transition:filter .12s,transform .12s}
+.btn:hover{filter:brightness(1.15);transform:translateX(2px)}
+.btn small{display:block;font-size:12px;letter-spacing:.06em;opacity:.85;font-weight:500}
+.btn.alt{background:rgba(255,255,255,.04);color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg);width:auto;white-space:nowrap;margin:0;clip-path:none;padding:10px 18px}
+.btn.alt:hover{background:var(--fg);color:var(--bg)}
+.btn.alt.sel2{background:var(--ac);color:#fff;box-shadow:none}
+.btn.opt{background:#0f1923;color:var(--fg);box-shadow:inset 0 0 0 1px var(--bd);text-align:left;letter-spacing:.02em;font-size:16px;font-weight:600;clip-path:none}
+.btn.opt:hover{box-shadow:inset 0 0 0 2px var(--ac);transform:none}
+.btn.opt.wp{display:flex;align-items:center;gap:14px}
+.btn.opt.sel{box-shadow:inset 0 0 0 2px var(--ac);background:rgba(255,70,85,.14)}
+.btn.ok{background:var(--ok)!important;color:#07261c!important;box-shadow:none!important}.btn.bad{background:var(--bad)!important;color:#fff!important;box-shadow:none!important}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.5);transform:none}
+.homewrap{display:grid;grid-template-columns:1.15fr 1fr;gap:34px;align-items:center;min-height:68vh}
+.keys{margin-top:14px;line-height:1.6}
+.lob{display:grid;grid-template-columns:250px 1fr 280px;gap:14px;align-items:start}
+.lob .card{margin:0 0 12px}
+@media(max-width:920px){.homewrap,.lob{grid-template-columns:1fr}h1{font-size:60px}}
+.agents{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.ag{background:#0f1923;border:1px solid var(--bd);color:var(--fg);padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;font:700 14px var(--f);transition:border-color .1s,background .1s}
+.ag:hover{border-color:var(--fg)}.ag.sel{border-color:var(--ac);background:rgba(255,70,85,.16)}
+.ag canvas{width:100%;max-width:56px;height:auto}
+.agd{margin-top:14px;font-size:15px;line-height:1.6}.agn{font-size:26px;font-weight:700;letter-spacing:.1em;color:var(--ac)}
+.pl{display:flex;align-items:center;gap:10px;padding:7px 10px;margin-bottom:6px;background:#0f1923;border-left:4px solid var(--bd);font-weight:600}
+.pi{width:34px;height:34px}
+.code{font-size:56px;font-weight:700;letter-spacing:.3em;color:var(--ac);text-align:center;line-height:1}
+.bn{min-width:96px;text-align:center;font-weight:700;font-size:19px}
+.qq{font-size:22px;font-weight:700;margin:4px 0 14px;line-height:1.4}
+#qbox .mut{letter-spacing:.12em}
+.hud,#feed{display:none}
+#game.scr{max-width:none;padding:0;margin:0}
+.cv{position:relative;aspect-ratio:900/560;width:min(100vw,calc(100vh*1.607));margin:0 auto;overflow:hidden;background:#000}
+.cv canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+#gl{pointer-events:none}#cv{cursor:crosshair}
+#rq{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%);width:min(94%,580px);margin:0;z-index:6}
+#mq{position:absolute;left:50%;bottom:92px;transform:translateX(-50%);width:min(94%,540px);margin:0;padding:10px 12px;opacity:.97}
+#mq .qq{font-size:16px;margin:2px 0 8px}#mq .btn{padding:7px 10px;font-size:14px;margin:4px 0}
+#admb{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:auto;z-index:20;padding:10px 18px;font-size:15px}
+#adm{position:fixed;right:12px;bottom:calc(64px + env(safe-area-inset-bottom,0px));width:min(94vw,400px);max-height:68vh;overflow:auto;z-index:20;margin:0}
+#dv{position:fixed;left:50%;top:28%;transform:translateX(-50%);width:min(90vw,320px);z-index:30;margin:0}
+#dev{position:fixed;left:12px;top:calc(190px + env(safe-area-inset-top,0px));width:min(92vw,250px);max-height:60vh;overflow:auto;z-index:20;margin:0;padding:10px}
+#cmdw{position:fixed;left:50%;bottom:calc(70px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(94vw,540px);z-index:25;margin:0;padding:10px}
+#cmdo{max-height:170px;overflow:auto;white-space:pre-wrap;margin-bottom:6px;font-size:13px}
+#chatw{position:fixed;left:12px;bottom:calc(100px + env(safe-area-inset-bottom,0px));width:min(92vw,340px);z-index:22;pointer-events:none}
+#chatlog{display:flex;flex-direction:column;gap:3px;align-items:flex-start;font-size:14px}
+.cm{background:rgba(15,25,35,.85);border-left:3px solid var(--ac);color:var(--fg);padding:3px 10px;max-width:100%;word-break:break-all}
+.cm.old{display:none}#chatw.open .cm.old{display:block}
+#chatin{display:none;pointer-events:auto;margin:6px 0 0}#chatw.open #chatin{display:block}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+</head>
+<body>
+<section id="home" class="scr">
+  <div class="homewrap">
+    <div class="brand">
+      <img id="logo" class="hide" alt="" style="max-width:100%;max-height:130px;margin-bottom:12px"><br><span class="tag">3D FPS · ENGLISH QUIZ</span>
+      <h1>ENGLISH<br><span>BATTLE</span></h1>
+      <p class="mut" style="font-size:18px">영어 퀴즈로 무기를 얻고, 친구 또는 CPU와 1인칭 전투!</p>
+    </div>
+    <div class="card menu">
+      <div class="lab">닉네임</div>
+      <input id="nick" maxlength="8" placeholder="닉네임을 입력하세요">
+      <button id="solo" class="btn" disabled>CPU 대전<small>혼자서 연습하기</small></button>
+      <button id="mk" class="btn" disabled>방 만들기<small>친구와 함께 플레이</small></button>
+      <div class="lab" style="margin-top:16px">방 코드로 입장</div>
+      <div class="row"><input id="code" maxlength="4" placeholder="4자리 코드" autocapitalize="off"><button id="jn" class="btn alt" disabled>입장</button></div>
+      <p id="msg" class="mut">연결 중…</p>
+    </div>
+  </div>
+  <p class="mut small keys">조작 · WASD 이동 · 마우스 시점(클릭하면 고정) · 클릭/스페이스 공격 · E 능력 · Q 궁극기 · SHIFT 구르기 · T 채팅 · / 명령어 · 1~4 퀴즈 답</p>
+</section>
+
+<section id="lobby" class="scr hide">
+  <h2>대기실 <span id="cnt" class="mut small"></span></h2>
+  <div class="lob">
+    <div>
+      <div class="card"><div id="rcl" class="lab">방 코드</div><div id="rc" class="code"></div></div>
+      <div class="card"><div class="lab">플레이어</div><div id="plist"></div></div>
+    </div>
+    <div id="chs" class="card"></div>
+    <div>
+      <div id="maps" class="card"></div>
+      <div id="bots" class="card"></div>
+    </div>
+  </div>
+  <button id="st" class="btn">게임 시작</button>
+  <p id="lw" class="mut" style="text-align:center">방장이 게임을 시작할 때까지 기다려요…</p>
+  <button id="lv" class="btn alt" style="margin:10px auto 0;display:block">나가기</button>
+</section>
+
+<section id="quiz" class="scr hide">
+  <h2>영어 퀴즈</h2>
+  <p class="mut">5문제를 풀어요! 많이 맞힐수록 좋은 무기를 고를 수 있어요. 무기는 <b>20초 안에</b> 골라야 해요. 안 고르면 영구 차단!</p>
+  <div id="qbox" class="card"></div>
+</section>
+
+<section id="game" class="scr hide">
+  <div class="hud"><span id="h1"></span><span id="h2"></span><span id="h3"></span></div>
+  <div class="cv"><canvas id="gl"></canvas><canvas id="cv" width="900" height="560"></canvas><div id="mq" class="card hide"></div><div id="rq" class="card hide"></div></div>
+  <div id="feed"></div>
+</section>
+
+<section id="end" class="scr hide">
+  <h2>결과</h2>
+  <div class="card"><div id="board"></div></div>
+  <button id="again" class="btn">다시 하기 (방장)</button>
+  <p id="ew" class="mut" style="text-align:center">방장이 다시 시작하길 기다려요…</p>
+  <button id="lv2" class="btn alt" style="margin:10px auto 0;display:block">나가기</button>
+</section>
+
+<div id="dv" class="card hide"><div class="qq">개발자 모드</div><input id="dvp" type="password" placeholder="비밀번호" autocomplete="off"><div class="row"><button id="dvok" class="btn">확인</button><button id="dvno" class="btn alt">취소</button></div><p id="dvm" class="mut small"></p></div>
+<div id="dev" class="card hide"></div>
+<div id="chatw" class="hide"><div id="chatlog"></div><input id="chatin" maxlength="80" placeholder="채팅 (Enter 전송 · Esc 닫기)" autocomplete="off"></div>
+<div id="cmdw" class="card hide"><div id="cmdo" class="mut"></div><input id="cmd" placeholder="/help" autocomplete="off" style="margin:0"></div>
+<button id="admb" class="btn hide">운영자</button>
+<div id="adm" class="card hide"></div>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+// ===== 문제 은행: [문제, 정답, 오답1, 오답2, 오답3] — 자유롭게 수정하세요 =====
+const Q=[
+["‘dog’의 뜻은?", "개", "기린", "새", "오리"],
+["‘고양이’를 영어로 하면?", "cat", "butterfly", "fish", "frog"],
+["‘토끼’를 영어로 하면?", "rabbit", "butterfly", "mouse", "fish"],
+["‘tiger’의 뜻은?", "호랑이", "원숭이", "다람쥐", "여우"],
+["‘사자’를 영어로 하면?", "lion", "fish", "fox", "chicken"],
+["‘elephant’의 뜻은?", "코끼리", "기린", "소", "토끼"],
+["‘원숭이’를 영어로 하면?", "monkey", "kangaroo", "fish", "penguin"],
+["‘bird’의 뜻은?", "새", "고래", "판다", "얼룩말"],
+["‘fish’의 뜻은?", "물고기", "개구리", "돼지", "캥거루"],
+["‘horse’의 뜻은?", "말", "오리", "소", "고양이"],
+["‘cow’의 뜻은?", "소", "고래", "나비", "거북이"],
+["‘돼지’를 영어로 하면?", "pig", "fish", "elephant", "chicken"],
+["‘sheep’의 뜻은?", "양", "펭귄", "얼룩말", "캥거루"],
+["‘오리’를 영어로 하면?", "duck", "cow", "frog", "chicken"],
+["‘chicken’의 뜻은?", "닭", "말", "새", "돌고래"],
+["‘곰’을 영어로 하면?", "bear", "lion", "turtle", "dog"],
+["‘fox’의 뜻은?", "여우", "얼룩말", "새", "개구리"],
+["‘giraffe’의 뜻은?", "기린", "곰", "나비", "거북이"],
+["‘zebra’의 뜻은?", "얼룩말", "돌고래", "사자", "캥거루"],
+["‘뱀’을 영어로 하면?", "snake", "turtle", "tiger", "giraffe"],
+["‘frog’의 뜻은?", "개구리", "사자", "곰", "새"],
+["‘거북이’를 영어로 하면?", "turtle", "penguin", "bear", "whale"],
+["‘penguin’의 뜻은?", "펭귄", "여우", "사자", "돌고래"],
+["‘dolphin’의 뜻은?", "돌고래", "기린", "거북이", "사자"],
+["‘고래’를 영어로 하면?", "whale", "bird", "cow", "mouse"],
+["‘mouse’의 뜻은?", "쥐", "돼지", "사자", "오리"],
+["‘squirrel’의 뜻은?", "다람쥐", "새", "나비", "판다"],
+["‘판다’를 영어로 하면?", "panda", "kangaroo", "cat", "butterfly"],
+["‘kangaroo’의 뜻은?", "캥거루", "토끼", "다람쥐", "소"],
+["‘butterfly’의 뜻은?", "나비", "얼룩말", "말", "소"],
+["‘사과’를 영어로 하면?", "apple", "cherry", "lemon", "banana"],
+["‘바나나’를 영어로 하면?", "banana", "kiwi", "grape", "lemon"],
+["‘grape’의 뜻은?", "포도", "사과", "수박", "오렌지"],
+["‘strawberry’의 뜻은?", "딸기", "망고", "복숭아", "토마토"],
+["‘수박’을 영어로 하면?", "watermelon", "melon", "peach", "grape"],
+["‘오렌지’를 영어로 하면?", "orange", "cherry", "kiwi", "lemon"],
+["‘peach’의 뜻은?", "복숭아", "키위", "파인애플", "토마토"],
+["‘pear’의 뜻은?", "배", "체리", "사과", "망고"],
+["‘lemon’의 뜻은?", "레몬", "토마토", "오렌지", "딸기"],
+["‘melon’의 뜻은?", "멜론", "파인애플", "복숭아", "키위"],
+["‘cherry’의 뜻은?", "체리", "오렌지", "파인애플", "수박"],
+["‘망고’를 영어로 하면?", "mango", "cherry", "orange", "lemon"],
+["‘pineapple’의 뜻은?", "파인애플", "레몬", "오렌지", "수박"],
+["‘kiwi’의 뜻은?", "키위", "체리", "멜론", "사과"],
+["‘tomato’의 뜻은?", "토마토", "키위", "오렌지", "수박"],
+["‘당근’을 영어로 하면?", "carrot", "cabbage", "onion", "garlic"],
+["‘감자’를 영어로 하면?", "potato", "spinach", "onion", "cabbage"],
+["‘양파’를 영어로 하면?", "onion", "garlic", "sweet potato", "spinach"],
+["‘cucumber’의 뜻은?", "오이", "무", "당근", "양파"],
+["‘양배추’를 영어로 하면?", "cabbage", "onion", "radish", "spinach"],
+["‘옥수수’를 영어로 하면?", "corn", "spinach", "pumpkin", "onion"],
+["‘호박’을 영어로 하면?", "pumpkin", "spinach", "carrot", "sweet potato"],
+["‘마늘’을 영어로 하면?", "garlic", "spinach", "potato", "radish"],
+["‘시금치’를 영어로 하면?", "spinach", "mushroom", "radish", "potato"],
+["‘mushroom’의 뜻은?", "버섯", "당근", "양파", "옥수수"],
+["‘고구마’를 영어로 하면?", "sweet potato", "corn", "radish", "spinach"],
+["‘radish’의 뜻은?", "무", "당근", "양파", "오이"],
+["‘bread’의 뜻은?", "빵", "설탕", "달걀", "우유"],
+["‘rice’의 뜻은?", "밥", "햄버거", "수프", "케이크"],
+["‘우유’를 영어로 하면?", "milk", "hamburger", "salad", "ice cream"],
+["‘water’의 뜻은?", "물", "치즈", "피자", "스파게티"],
+["‘juice’의 뜻은?", "주스", "피자", "소금", "스파게티"],
+["‘달걀’을 영어로 하면?", "egg", "cake", "ice cream", "hamburger"],
+["‘cheese’의 뜻은?", "치즈", "국수", "밥", "우유"],
+["‘피자’를 영어로 하면?", "pizza", "rice", "salt", "cookie"],
+["‘햄버거’를 영어로 하면?", "hamburger", "milk", "cake", "noodles"],
+["‘noodles’의 뜻은?", "국수", "우유", "밥", "버터"],
+["‘soup’의 뜻은?", "수프", "쿠키", "치즈", "케이크"],
+["‘샐러드’를 영어로 하면?", "salad", "hamburger", "juice", "sugar"],
+["‘cake’의 뜻은?", "케이크", "밥", "스파게티", "햄버거"],
+["‘쿠키’를 영어로 하면?", "cookie", "bread", "juice", "cheese"],
+["‘ice cream’의 뜻은?", "아이스크림", "수프", "샌드위치", "쿠키"],
+["‘sandwich’의 뜻은?", "샌드위치", "빵", "피자", "주스"],
+["‘spaghetti’의 뜻은?", "스파게티", "샌드위치", "아이스크림", "소금"],
+["‘butter’의 뜻은?", "버터", "주스", "케이크", "국수"],
+["‘설탕’을 영어로 하면?", "sugar", "rice", "water", "soup"],
+["‘salt’의 뜻은?", "소금", "샐러드", "우유", "설탕"],
+["‘red’의 뜻은?", "빨간색", "보라색", "분홍색", "파란색"],
+["‘파란색’을 영어로 하면?", "blue", "brown", "red", "black"],
+["‘yellow’의 뜻은?", "노란색", "검은색", "회색", "보라색"],
+["‘green’의 뜻은?", "초록색", "갈색", "파란색", "회색"],
+["‘검은색’을 영어로 하면?", "black", "pink", "red", "green"],
+["‘white’의 뜻은?", "흰색", "파란색", "분홍색", "검은색"],
+["‘분홍색’을 영어로 하면?", "pink", "red", "green", "purple"],
+["‘보라색’을 영어로 하면?", "purple", "white", "red", "green"],
+["‘brown’의 뜻은?", "갈색", "검은색", "회색", "빨간색"],
+["‘gray’의 뜻은?", "회색", "흰색", "갈색", "검은색"],
+["‘머리’를 영어로 하면?", "head", "nose", "eye", "arm"],
+["‘eye’의 뜻은?", "눈", "입", "치아", "팔"],
+["‘nose’의 뜻은?", "코", "무릎", "귀", "치아"],
+["‘mouth’의 뜻은?", "입", "무릎", "얼굴", "머리카락"],
+["‘귀’를 영어로 하면?", "ear", "back", "knee", "nose"],
+["‘손’을 영어로 하면?", "hand", "finger", "knee", "shoulder"],
+["‘발’을 영어로 하면?", "foot", "tooth", "stomach", "face"],
+["‘arm’의 뜻은?", "팔", "입", "얼굴", "발"],
+["‘leg’의 뜻은?", "다리", "얼굴", "발", "목"],
+["‘목’을 영어로 하면?", "neck", "eye", "leg", "knee"],
+["‘어깨’를 영어로 하면?", "shoulder", "leg", "finger", "mouth"],
+["‘무릎’을 영어로 하면?", "knee", "shoulder", "eye", "mouth"],
+["‘손가락’을 영어로 하면?", "finger", "ear", "head", "eye"],
+["‘tooth’의 뜻은?", "치아", "무릎", "팔", "손가락"],
+["‘hair’의 뜻은?", "머리카락", "코", "어깨", "입"],
+["‘얼굴’을 영어로 하면?", "face", "stomach", "neck", "hand"],
+["‘back’의 뜻은?", "등", "치아", "머리", "손"],
+["‘stomach’의 뜻은?", "배(몸)", "얼굴", "눈", "발"],
+["‘mother’의 뜻은?", "어머니", "부모님", "할머니", "아기"],
+["‘father’의 뜻은?", "아버지", "형·오빠·남동생", "사촌", "할아버지"],
+["‘sister’의 뜻은?", "누나·언니·여동생", "할아버지", "사촌", "어머니"],
+["‘brother’의 뜻은?", "형·오빠·남동생", "사촌", "어머니", "할아버지"],
+["‘할머니’를 영어로 하면?", "grandmother", "sister", "mother", "uncle"],
+["‘grandfather’의 뜻은?", "할아버지", "형·오빠·남동생", "부모님", "어머니"],
+["‘uncle’의 뜻은?", "삼촌", "아기", "어머니", "형·오빠·남동생"],
+["‘aunt’의 뜻은?", "이모·고모", "아들", "형·오빠·남동생", "아버지"],
+["‘baby’의 뜻은?", "아기", "아버지", "형·오빠·남동생", "어머니"],
+["‘사촌’을 영어로 하면?", "cousin", "daughter", "brother", "son"],
+["‘parents’의 뜻은?", "부모님", "아버지", "형·오빠·남동생", "딸"],
+["‘아들’을 영어로 하면?", "son", "brother", "father", "parents"],
+["‘딸’을 영어로 하면?", "daughter", "sister", "baby", "parents"],
+["‘doctor’의 뜻은?", "의사", "배우", "조종사", "간호사"],
+["‘선생님’을 영어로 하면?", "teacher", "artist", "police officer", "actor"],
+["‘간호사’를 영어로 하면?", "nurse", "firefighter", "artist", "programmer"],
+["‘police officer’의 뜻은?", "경찰관", "선생님", "치과 의사", "가수"],
+["‘firefighter’의 뜻은?", "소방관", "의사", "수의사", "배우"],
+["‘요리사’를 영어로 하면?", "chef", "nurse", "vet", "actor"],
+["‘농부’를 영어로 하면?", "farmer", "police officer", "dentist", "writer"],
+["‘조종사’를 영어로 하면?", "pilot", "artist", "vet", "nurse"],
+["‘가수’를 영어로 하면?", "singer", "firefighter", "baker", "artist"],
+["‘치과 의사’를 영어로 하면?", "dentist", "soldier", "actor", "astronaut"],
+["‘화가’를 영어로 하면?", "artist", "pilot", "nurse", "chef"],
+["‘과학자’를 영어로 하면?", "scientist", "driver", "artist", "astronaut"],
+["‘baker’의 뜻은?", "제빵사", "소방관", "우주비행사", "과학자"],
+["‘운전기사’를 영어로 하면?", "driver", "baker", "dentist", "programmer"],
+["‘수의사’를 영어로 하면?", "vet", "artist", "actor", "doctor"],
+["‘writer’의 뜻은?", "작가", "의사", "조종사", "군인"],
+["‘soldier’의 뜻은?", "군인", "화가", "의사", "농부"],
+["‘astronaut’의 뜻은?", "우주비행사", "제빵사", "군인", "치과 의사"],
+["‘programmer’의 뜻은?", "프로그래머", "화가", "수의사", "조종사"],
+["‘actor’의 뜻은?", "배우", "치과 의사", "농부", "간호사"],
+["‘school’의 뜻은?", "학교", "역", "소방서", "약국"],
+["‘hospital’의 뜻은?", "병원", "슈퍼마켓", "학교", "서점"],
+["‘도서관’을 영어로 하면?", "library", "police station", "airport", "flower shop"],
+["‘park’의 뜻은?", "공원", "약국", "역", "식당"],
+["‘museum’의 뜻은?", "박물관", "빵집", "꽃집", "슈퍼마켓"],
+["‘bank’의 뜻은?", "은행", "학교", "슈퍼마켓", "우체국"],
+["‘우체국’을 영어로 하면?", "post office", "cafe", "market", "bank"],
+["‘market’의 뜻은?", "시장", "소방서", "교회", "박물관"],
+["‘bakery’의 뜻은?", "빵집", "병원", "박물관", "공원"],
+["‘restaurant’의 뜻은?", "식당", "동물원", "교회", "학교"],
+["‘zoo’의 뜻은?", "동물원", "도서관", "시장", "극장"],
+["‘airport’의 뜻은?", "공항", "경찰서", "서점", "동물원"],
+["‘station’의 뜻은?", "역", "서점", "교회", "우체국"],
+["‘슈퍼마켓’을 영어로 하면?", "supermarket", "church", "fire station", "library"],
+["‘church’의 뜻은?", "교회", "식당", "약국", "동물원"],
+["‘경찰서’를 영어로 하면?", "police station", "supermarket", "airport", "fire station"],
+["‘소방서’를 영어로 하면?", "fire station", "pharmacy", "restaurant", "church"],
+["‘bookstore’의 뜻은?", "서점", "학교", "교회", "역"],
+["‘theater’의 뜻은?", "극장", "공항", "경찰서", "박물관"],
+["‘꽃집’을 영어로 하면?", "flower shop", "pharmacy", "park", "restaurant"],
+["‘약국’을 영어로 하면?", "pharmacy", "supermarket", "market", "bookstore"],
+["‘cafe’의 뜻은?", "카페", "꽃집", "학교", "은행"],
+["‘수학’을 영어로 하면?", "math", "computer", "history", "art"],
+["‘과학’을 영어로 하면?", "science", "computer", "English", "history"],
+["‘영어’를 영어로 하면?", "English", "science", "social studies", "Korean"],
+["‘국어’를 영어로 하면?", "Korean", "music", "science", "English"],
+["‘음악’을 영어로 하면?", "music", "art", "computer", "social studies"],
+["‘미술’을 영어로 하면?", "art", "computer", "Korean", "P.E."],
+["‘체육’을 영어로 하면?", "P.E.", "Korean", "music", "art"],
+["‘social studies’의 뜻은?", "사회", "체육", "음악", "미술"],
+["‘역사’를 영어로 하면?", "history", "English", "math", "music"],
+["‘computer’의 뜻은?", "컴퓨터", "국어", "과학", "영어"],
+["‘pencil’의 뜻은?", "연필", "가위", "우산", "지우개"],
+["‘eraser’의 뜻은?", "지우개", "지도", "의자", "가위"],
+["‘자’를 영어로 하면?", "ruler", "book", "door", "bag"],
+["‘notebook’의 뜻은?", "공책", "크레용", "연필", "책"],
+["‘책’을 영어로 하면?", "book", "chair", "door", "crayon"],
+["‘가방’을 영어로 하면?", "bag", "clock", "scissors", "desk"],
+["‘책상’을 영어로 하면?", "desk", "clock", "ruler", "board"],
+["‘chair’의 뜻은?", "의자", "시계", "지도", "자"],
+["‘scissors’의 뜻은?", "가위", "공책", "시계", "풀"],
+["‘풀’을 영어로 하면?", "glue", "pencil", "notebook", "crayon"],
+["‘crayon’의 뜻은?", "크레용", "연필", "시계", "책상"],
+["‘칠판’을 영어로 하면?", "board", "desk", "clock", "ruler"],
+["‘clock’의 뜻은?", "시계", "풀", "문", "크레용"],
+["‘창문’을 영어로 하면?", "window", "glue", "crayon", "desk"],
+["‘문’을 영어로 하면?", "door", "chair", "umbrella", "eraser"],
+["‘umbrella’의 뜻은?", "우산", "가위", "의자", "공책"],
+["‘map’의 뜻은?", "지도", "공책", "창문", "책상"],
+["‘셔츠’를 영어로 하면?", "shirt", "boots", "gloves", "sneakers"],
+["‘바지’를 영어로 하면?", "pants", "T-shirt", "sweater", "jacket"],
+["‘skirt’의 뜻은?", "치마", "목도리", "장갑", "스웨터"],
+["‘dress’의 뜻은?", "원피스", "치마", "신발", "티셔츠"],
+["‘shoes’의 뜻은?", "신발", "원피스", "모자", "부츠"],
+["‘socks’의 뜻은?", "양말", "셔츠", "치마", "안경"],
+["‘모자’를 영어로 하면?", "hat", "dress", "shirt", "skirt"],
+["‘재킷’을 영어로 하면?", "jacket", "socks", "coat", "skirt"],
+["‘외투’를 영어로 하면?", "coat", "gloves", "sweater", "jacket"],
+["‘장갑’을 영어로 하면?", "gloves", "T-shirt", "hat", "dress"],
+["‘목도리’를 영어로 하면?", "scarf", "coat", "glasses", "gloves"],
+["‘티셔츠’를 영어로 하면?", "T-shirt", "skirt", "hat", "sneakers"],
+["‘sweater’의 뜻은?", "스웨터", "외투", "모자", "운동화"],
+["‘안경’을 영어로 하면?", "glasses", "socks", "shoes", "sneakers"],
+["‘boots’의 뜻은?", "부츠", "셔츠", "모자", "바지"],
+["‘sneakers’의 뜻은?", "운동화", "셔츠", "장갑", "원피스"],
+["‘sunny’의 뜻은?", "맑은", "흐린", "안개 낀", "바람 부는"],
+["‘흐린’을 영어로 하면?", "cloudy", "hot", "warm", "cold"],
+["‘rainy’의 뜻은?", "비 오는", "안개 낀", "맑은", "흐린"],
+["‘눈 오는’을 영어로 하면?", "snowy", "cold", "sunny", "rainy"],
+["‘windy’의 뜻은?", "바람 부는", "시원한", "안개 낀", "비 오는"],
+["‘더운·뜨거운’을 영어로 하면?", "hot", "cold", "cloudy", "cool"],
+["‘추운·차가운’을 영어로 하면?", "cold", "foggy", "hot", "cool"],
+["‘따뜻한’을 영어로 하면?", "warm", "rainy", "sunny", "snowy"],
+["‘시원한’을 영어로 하면?", "cool", "cloudy", "warm", "rainy"],
+["‘foggy’의 뜻은?", "안개 낀", "추운·차가운", "바람 부는", "더운·뜨거운"],
+["‘Monday’의 뜻은?", "월요일", "일요일", "목요일", "화요일"],
+["‘Tuesday’의 뜻은?", "화요일", "일요일", "월요일", "목요일"],
+["‘수요일’을 영어로 하면?", "Wednesday", "Sunday", "Thursday", "Saturday"],
+["‘Thursday’의 뜻은?", "목요일", "토요일", "수요일", "금요일"],
+["‘Friday’의 뜻은?", "금요일", "목요일", "월요일", "토요일"],
+["‘Saturday’의 뜻은?", "토요일", "수요일", "금요일", "일요일"],
+["‘Sunday’의 뜻은?", "일요일", "토요일", "월요일", "화요일"],
+["‘January’의 뜻은?", "1월", "5월", "12월", "2월"],
+["‘2월’을 영어로 하면?", "February", "September", "July", "June"],
+["‘March’의 뜻은?", "3월", "1월", "9월", "8월"],
+["‘4월’을 영어로 하면?", "April", "December", "May", "August"],
+["‘5월’을 영어로 하면?", "May", "January", "August", "December"],
+["‘June’의 뜻은?", "6월", "9월", "1월", "10월"],
+["‘7월’을 영어로 하면?", "July", "February", "January", "December"],
+["‘August’의 뜻은?", "8월", "12월", "7월", "6월"],
+["‘September’의 뜻은?", "9월", "12월", "8월", "6월"],
+["‘October’의 뜻은?", "10월", "11월", "8월", "5월"],
+["‘11월’을 영어로 하면?", "November", "June", "March", "July"],
+["‘December’의 뜻은?", "12월", "2월", "3월", "11월"],
+["‘봄’을 영어로 하면?", "spring", "winter", "autumn", "summer"],
+["‘summer’의 뜻은?", "여름", "겨울", "가을", "봄"],
+["‘가을’을 영어로 하면?", "autumn", "winter", "spring", "summer"],
+["‘겨울’을 영어로 하면?", "winter", "autumn", "spring", "summer"],
+["‘1’을 영어로 하면?", "one", "eighteen", "ten", "thirty"],
+["‘two’은(는) 숫자로 얼마일까요?", "2", "8", "16", "20"],
+["‘three’은(는) 숫자로 얼마일까요?", "3", "14", "15", "10"],
+["‘four’은(는) 숫자로 얼마일까요?", "4", "6", "80", "40"],
+["‘5’를 영어로 하면?", "five", "fifteen", "ninety", "nineteen"],
+["‘six’은(는) 숫자로 얼마일까요?", "6", "14", "30", "11"],
+["‘seven’은(는) 숫자로 얼마일까요?", "7", "1", "2", "19"],
+["‘8’을 영어로 하면?", "eight", "fourteen", "twenty", "seventeen"],
+["‘nine’은(는) 숫자로 얼마일까요?", "9", "17", "13", "19"],
+["‘ten’은(는) 숫자로 얼마일까요?", "10", "8", "4", "18"],
+["‘11’을 영어로 하면?", "eleven", "twelve", "six", "one"],
+["‘twelve’은(는) 숫자로 얼마일까요?", "12", "50", "100", "13"],
+["‘thirteen’은(는) 숫자로 얼마일까요?", "13", "40", "1", "12"],
+["‘14’를 영어로 하면?", "fourteen", "fifty", "ten", "fifteen"],
+["‘15’를 영어로 하면?", "fifteen", "sixty", "twenty", "seventeen"],
+["‘sixteen’은(는) 숫자로 얼마일까요?", "16", "5", "70", "19"],
+["‘17’을 영어로 하면?", "seventeen", "ninety", "sixty", "seven"],
+["‘eighteen’은(는) 숫자로 얼마일까요?", "18", "5", "90", "15"],
+["‘nineteen’은(는) 숫자로 얼마일까요?", "19", "17", "70", "80"],
+["‘20’을 영어로 하면?", "twenty", "ninety", "two", "four"],
+["‘thirty’은(는) 숫자로 얼마일까요?", "30", "1", "6", "2"],
+["‘40’을 영어로 하면?", "forty", "seventeen", "fourteen", "two"],
+["‘50’을 영어로 하면?", "fifty", "forty", "seven", "seventeen"],
+["‘sixty’은(는) 숫자로 얼마일까요?", "60", "15", "40", "11"],
+["‘70’을 영어로 하면?", "seventy", "fifty", "one", "thirty"],
+["‘80’을 영어로 하면?", "eighty", "fifty", "eleven", "six"],
+["‘ninety’은(는) 숫자로 얼마일까요?", "90", "11", "80", "20"],
+["‘100’을 영어로 하면?", "one hundred", "seventeen", "six", "four"],
+["‘big’의 뜻은?", "큰", "졸린", "조용한", "배고픈"],
+["‘작은’을 영어로 하면?", "small", "new", "expensive", "fast"],
+["‘tall’의 뜻은?", "키가 큰", "무거운", "무서워하는", "배부른"],
+["‘short’의 뜻은?", "짧은·키가 작은", "배고픈", "긴", "비싼"],
+["‘긴’을 영어로 하면?", "long", "noisy", "funny", "kind"],
+["‘fast’의 뜻은?", "빠른", "피곤한", "쉬운", "배부른"],
+["‘느린’을 영어로 하면?", "slow", "hungry", "busy", "brave"],
+["‘행복한’을 영어로 하면?", "happy", "full", "hungry", "strong"],
+["‘sad’의 뜻은?", "슬픈", "배고픈", "깨끗한", "어려운"],
+["‘old’의 뜻은?", "나이 든", "느린", "용감한", "어린"],
+["‘어린’을 영어로 하면?", "young", "quiet", "beautiful", "scared"],
+["‘new’의 뜻은?", "새로운", "배부른", "짧은·키가 작은", "무서워하는"],
+["‘무거운’을 영어로 하면?", "heavy", "delicious", "long", "strong"],
+["‘light’의 뜻은?", "가벼운", "키가 큰", "쉬운", "무서워하는"],
+["‘아름다운’을 영어로 하면?", "beautiful", "long", "kind", "small"],
+["‘깨끗한’을 영어로 하면?", "clean", "fast", "easy", "kind"],
+["‘더러운’을 영어로 하면?", "dirty", "cheap", "strong", "easy"],
+["‘쉬운’을 영어로 하면?", "easy", "scared", "angry", "kind"],
+["‘어려운’을 영어로 하면?", "difficult", "thirsty", "strong", "short"],
+["‘strong’의 뜻은?", "강한", "화난", "빠른", "무서워하는"],
+["‘약한’을 영어로 하면?", "weak", "angry", "short", "light"],
+["‘kind’의 뜻은?", "친절한", "더러운", "작은", "피곤한"],
+["‘웃긴’을 영어로 하면?", "funny", "easy", "dirty", "old"],
+["‘angry’의 뜻은?", "화난", "피곤한", "짧은·키가 작은", "쉬운"],
+["‘tired’의 뜻은?", "피곤한", "졸린", "큰", "값싼"],
+["‘배고픈’을 영어로 하면?", "hungry", "tall", "sad", "big"],
+["‘목마른’을 영어로 하면?", "thirsty", "brave", "clean", "sad"],
+["‘졸린’을 영어로 하면?", "sleepy", "sad", "funny", "big"],
+["‘무서워하는’을 영어로 하면?", "scared", "easy", "dirty", "difficult"],
+["‘delicious’의 뜻은?", "맛있는", "어려운", "값싼", "피곤한"],
+["‘용감한’을 영어로 하면?", "brave", "heavy", "strong", "quiet"],
+["‘quiet’의 뜻은?", "조용한", "슬픈", "행복한", "피곤한"],
+["‘시끄러운’을 영어로 하면?", "noisy", "expensive", "old", "new"],
+["‘바쁜’을 영어로 하면?", "busy", "difficult", "easy", "dirty"],
+["‘expensive’의 뜻은?", "비싼", "피곤한", "긴", "바쁜"],
+["‘cheap’의 뜻은?", "값싼", "가벼운", "쉬운", "약한"],
+["‘배부른’을 영어로 하면?", "full", "sleepy", "strong", "expensive"],
+["‘먹다’를 영어로 하면?", "eat", "play", "cook", "fly"],
+["‘마시다’를 영어로 하면?", "drink", "sell", "jump", "run"],
+["‘자다’를 영어로 하면?", "sleep", "read", "clean up", "cook"],
+["‘달리다’를 영어로 하면?", "run", "look", "climb", "brush"],
+["‘걷다’를 영어로 하면?", "walk", "look", "ride", "drink"],
+["‘swim’의 뜻은?", "수영하다", "듣다", "잠에서 깨다", "뛰다"],
+["‘뛰다’를 영어로 하면?", "jump", "kick", "swim", "look"],
+["‘읽다’를 영어로 하면?", "read", "help", "wait", "wake up"],
+["‘write’의 뜻은?", "쓰다", "달리다", "씻다", "기다리다"],
+["‘sing’의 뜻은?", "노래하다", "놀다", "돕다", "서다"],
+["‘dance’의 뜻은?", "춤추다", "수영하다", "서다", "잡다"],
+["‘그리다’를 영어로 하면?", "draw", "think", "sit", "write"],
+["‘요리하다’를 영어로 하면?", "cook", "catch", "climb", "close"],
+["‘공부하다’를 영어로 하면?", "study", "walk", "run", "visit"],
+["‘listen’의 뜻은?", "듣다", "오다", "닦다", "팔다"],
+["‘보다’를 영어로 하면?", "look", "stand", "sit", "go"],
+["‘wash’의 뜻은?", "씻다", "돕다", "달리다", "쓰다"],
+["‘open’의 뜻은?", "열다", "팔다", "듣다", "돕다"],
+["‘닫다’를 영어로 하면?", "close", "think", "fly", "wake up"],
+["‘앉다’를 영어로 하면?", "sit", "play", "kick", "fly"],
+["‘서다’를 영어로 하면?", "stand", "ride", "kick", "help"],
+["‘가다’를 영어로 하면?", "go", "sleep", "close", "read"],
+["‘come’의 뜻은?", "오다", "먹다", "생각하다", "그리다"],
+["‘buy’의 뜻은?", "사다", "열다", "먹다", "잡다"],
+["‘sell’의 뜻은?", "팔다", "수영하다", "오다", "차다"],
+["‘주다’를 영어로 하면?", "give", "read", "write", "sell"],
+["‘돕다’를 영어로 하면?", "help", "dance", "think", "buy"],
+["‘타다’를 영어로 하면?", "ride", "play", "close", "think"],
+["‘climb’의 뜻은?", "오르다", "주다", "잠에서 깨다", "돕다"],
+["‘날다’를 영어로 하면?", "fly", "sleep", "cook", "dance"],
+["‘던지다’를 영어로 하면?", "throw", "sit", "write", "run"],
+["‘catch’의 뜻은?", "잡다", "방문하다", "수영하다", "타다"],
+["‘kick’의 뜻은?", "차다", "잠에서 깨다", "팔다", "자다"],
+["‘청소하다’를 영어로 하면?", "clean up", "wash", "go", "sing"],
+["‘wait’의 뜻은?", "기다리다", "차다", "요리하다", "청소하다"],
+["‘visit’의 뜻은?", "방문하다", "기다리다", "사다", "잠에서 깨다"],
+["‘생각하다’를 영어로 하면?", "think", "help", "fly", "clean up"],
+["‘잠에서 깨다’를 영어로 하면?", "wake up", "jump", "look", "study"],
+["‘brush’의 뜻은?", "닦다", "타다", "닫다", "던지다"],
+["‘play’의 뜻은?", "놀다", "타다", "자다", "달리다"],
+["‘버스’를 영어로 하면?", "bus", "bike", "ship", "car"],
+["‘기차’를 영어로 하면?", "train", "helicopter", "airplane", "subway"],
+["‘지하철’을 영어로 하면?", "subway", "truck", "airplane", "bike"],
+["‘car’의 뜻은?", "자동차", "배(큰 배)", "헬리콥터", "기차"],
+["‘자전거’를 영어로 하면?", "bike", "taxi", "train", "ship"],
+["‘비행기’를 영어로 하면?", "airplane", "car", "ship", "truck"],
+["‘ship’의 뜻은?", "배(큰 배)", "지하철", "헬리콥터", "트럭"],
+["‘택시’를 영어로 하면?", "taxi", "bus", "airplane", "truck"],
+["‘truck’의 뜻은?", "트럭", "배(큰 배)", "자전거", "버스"],
+["‘헬리콥터’를 영어로 하면?", "helicopter", "taxi", "train", "airplane"],
+["‘해’를 영어로 하면?", "sun", "rock", "river", "forest"],
+["‘달’을 영어로 하면?", "moon", "mountain", "beach", "star"],
+["‘star’의 뜻은?", "별", "무지개", "눈(내리는 눈)", "구름"],
+["‘tree’의 뜻은?", "나무", "해변", "숲", "비"],
+["‘꽃’을 영어로 하면?", "flower", "moon", "lake", "rainbow"],
+["‘mountain’의 뜻은?", "산", "비", "바위", "바람"],
+["‘river’의 뜻은?", "강", "구름", "해변", "산"],
+["‘바다’를 영어로 하면?", "sea", "grass", "lake", "mountain"],
+["‘하늘’을 영어로 하면?", "sky", "lake", "moon", "sun"],
+["‘rain’의 뜻은?", "비", "호수", "강", "눈(내리는 눈)"],
+["‘snow’의 뜻은?", "눈(내리는 눈)", "무지개", "강", "산"],
+["‘wind’의 뜻은?", "바람", "꽃", "호수", "달"],
+["‘cloud’의 뜻은?", "구름", "산", "달", "바람"],
+["‘바위’를 영어로 하면?", "rock", "moon", "sea", "beach"],
+["‘grass’의 뜻은?", "풀(잔디)", "하늘", "강", "구름"],
+["‘숲’을 영어로 하면?", "forest", "flower", "wind", "star"],
+["‘해변’을 영어로 하면?", "beach", "snow", "grass", "star"],
+["‘호수’를 영어로 하면?", "lake", "sea", "grass", "sky"],
+["‘섬’을 영어로 하면?", "island", "flower", "rain", "beach"],
+["‘rainbow’의 뜻은?", "무지개", "달", "해", "산"],
+["‘집’을 영어로 하면?", "house", "lamp", "TV", "room"],
+["‘방’을 영어로 하면?", "room", "bathroom", "mirror", "bed"],
+["‘부엌’을 영어로 하면?", "kitchen", "stairs", "mirror", "bed"],
+["‘욕실’을 영어로 하면?", "bathroom", "sofa", "mirror", "bed"],
+["‘침실’을 영어로 하면?", "bedroom", "lamp", "sofa", "table"],
+["‘거실’을 영어로 하면?", "living room", "mirror", "lamp", "stairs"],
+["‘정원’을 영어로 하면?", "garden", "roof", "kitchen", "table"],
+["‘table’의 뜻은?", "탁자", "전등", "지붕", "계단"],
+["‘bed’의 뜻은?", "침대", "탁자", "집", "냉장고"],
+["‘sofa’의 뜻은?", "소파", "탁자", "거실", "욕실"],
+["‘lamp’의 뜻은?", "전등", "정원", "부엌", "집"],
+["‘텔레비전’을 영어로 하면?", "TV", "refrigerator", "roof", "mirror"],
+["‘냉장고’를 영어로 하면?", "refrigerator", "sofa", "roof", "bed"],
+["‘mirror’의 뜻은?", "거울", "냉장고", "탁자", "계단"],
+["‘계단’을 영어로 하면?", "stairs", "room", "refrigerator", "lamp"],
+["‘지붕’을 영어로 하면?", "roof", "table", "mirror", "room"],
+["‘축구’를 영어로 하면?", "soccer", "swimming", "baseball", "taekwondo"],
+["‘야구’를 영어로 하면?", "baseball", "hiking", "camping", "fishing"],
+["‘농구’를 영어로 하면?", "basketball", "camping", "badminton", "baseball"],
+["‘테니스’를 영어로 하면?", "tennis", "fishing", "taekwondo", "skating"],
+["‘badminton’의 뜻은?", "배드민턴", "테니스", "배구", "낚시"],
+["‘수영’을 영어로 하면?", "swimming", "tennis", "skiing", "fishing"],
+["‘skiing’의 뜻은?", "스키", "야구", "배구", "스케이트"],
+["‘skating’의 뜻은?", "스케이트", "스키", "테니스", "낚시"],
+["‘taekwondo’의 뜻은?", "태권도", "테니스", "낚시", "수영"],
+["‘배구’를 영어로 하면?", "volleyball", "basketball", "skiing", "golf"],
+["‘golf’의 뜻은?", "골프", "배구", "야구", "테니스"],
+["‘hiking’의 뜻은?", "등산", "배구", "농구", "수영"],
+["‘낚시’를 영어로 하면?", "fishing", "camping", "skiing", "skating"],
+["‘camping’의 뜻은?", "캠핑", "테니스", "배구", "축구"],
+["‘big’의 반대말은?", "small", "yes", "dirty", "hot"],
+["‘tall’의 반대말은?", "short", "rich", "slow", "close"],
+["‘hot’의 반대말은?", "cold", "difficult", "full", "high"],
+["‘fast’의 반대말은?", "slow", "easy", "low", "sad"],
+["‘happy’의 반대말은?", "sad", "back", "dry", "tall"],
+["‘old’의 반대말은?", "young", "low", "front", "close"],
+["‘open’의 반대말은?", "close", "weak", "boy", "left"],
+["‘up’의 반대말은?", "down", "early", "heavy", "come"],
+["‘in’의 반대말은?", "out", "old", "happy", "young"],
+["‘day’의 반대말은?", "night", "high", "fast", "good"],
+["‘long’의 반대말은?", "short", "slow", "tall", "go"],
+["‘heavy’의 반대말은?", "light", "night", "white", "strong"],
+["‘clean’의 반대말은?", "dirty", "wet", "buy", "weak"],
+["‘easy’의 반대말은?", "difficult", "weak", "down", "white"],
+["‘strong’의 반대말은?", "weak", "small", "hot", "empty"],
+["‘hard’의 반대말은?", "soft", "young", "slow", "close"],
+["‘wet’의 반대말은?", "dry", "up", "in", "hot"],
+["‘full’의 반대말은?", "empty", "big", "black", "easy"],
+["‘good’의 반대말은?", "bad", "sell", "old", "push"],
+["‘left’의 반대말은?", "right", "out", "strong", "back"],
+["‘early’의 반대말은?", "late", "day", "left", "old"],
+["‘buy’의 반대말은?", "sell", "left", "fast", "push"],
+["‘come’의 반대말은?", "go", "high", "early", "late"],
+["‘push’의 반대말은?", "pull", "down", "strong", "fast"],
+["‘boy’의 반대말은?", "girl", "hard", "open", "dirty"],
+["‘yes’의 반대말은?", "no", "right", "rich", "pull"],
+["‘black’의 반대말은?", "white", "push", "high", "go"],
+["‘rich’의 반대말은?", "poor", "up", "early", "yes"],
+["‘high’의 반대말은?", "low", "come", "happy", "difficult"],
+["‘front’의 반대말은?", "back", "open", "dirty", "rich"],
+["Which one is different? ‘bear, living room, bed, table’", "bear", "living room", "bed", "table"],
+["Which one is different? ‘vet, baker, restaurant, singer’", "restaurant", "vet", "baker", "singer"],
+["Which one is different? ‘dog, camping, lion, turtle’", "camping", "dog", "lion", "turtle"],
+["Which one is different? ‘vet, singer, scientist, duck’", "duck", "vet", "singer", "scientist"],
+["Which one is different? ‘purple, writer, driver, dentist’", "purple", "writer", "driver", "dentist"],
+["Which one is different? ‘cherry, roof, living room, bathroom’", "cherry", "roof", "living room", "bathroom"],
+["Which one is different? ‘rain, math, history, P.E.’", "rain", "math", "history", "P.E."],
+["Which one is different? ‘sneakers, singer, sweater, scarf’", "singer", "sneakers", "sweater", "scarf"],
+["Which one is different? ‘roof, TV, table, nose’", "nose", "roof", "TV", "table"],
+["Which one is different? ‘fox, dolphin, elephant, carrot’", "carrot", "fox", "dolphin", "elephant"],
+["Which one is different? ‘Korean, music, math, skating’", "skating", "Korean", "music", "math"],
+["Which one is different? ‘police officer, train, nurse, pilot’", "train", "police officer", "nurse", "pilot"],
+["Which one is different? ‘banana, sneakers, cherry, orange’", "sneakers", "banana", "cherry", "orange"],
+["Which one is different? ‘white, jacket, brown, blue’", "jacket", "white", "brown", "blue"],
+["Which one is different? ‘lamp, room, garden, hiking’", "hiking", "lamp", "room", "garden"],
+["Which one is different? ‘cabbage, corn, tooth, onion’", "tooth", "cabbage", "corn", "onion"],
+["Which one is different? ‘snake, subway, rabbit, cow’", "subway", "snake", "rabbit", "cow"],
+["Which one is different? ‘shoes, snow, pants, dress’", "snow", "shoes", "pants", "dress"],
+["Which one is different? ‘TV, swimming, bedroom, lamp’", "swimming", "TV", "bedroom", "lamp"],
+["Which one is different? ‘dolphin, green, white, red’", "dolphin", "green", "white", "red"],
+["Which one is different? ‘airport, park, police station, tomato’", "tomato", "airport", "park", "police station"],
+["Which one is different? ‘sneakers, squirrel, sheep, rabbit’", "sneakers", "squirrel", "sheep", "rabbit"],
+["Which one is different? ‘fish, nose, face, arm’", "fish", "nose", "face", "arm"],
+["Which one is different? ‘panda, tiger, soccer, butterfly’", "soccer", "panda", "tiger", "butterfly"],
+["Which one is different? ‘blue, purple, gloves, black’", "gloves", "blue", "purple", "black"],
+["Which one is different? ‘English, skiing, art, history’", "skiing", "English", "art", "history"],
+["Which one is different? ‘roof, room, refrigerator, onion’", "onion", "roof", "room", "refrigerator"],
+["Which one is different? ‘museum, house, hospital, pharmacy’", "house", "museum", "hospital", "pharmacy"],
+["Which one is different? ‘police station, church, mouth, station’", "mouth", "police station", "church", "station"],
+["Which one is different? ‘sea, forest, cloud, sneakers’", "sneakers", "sea", "forest", "cloud"],
+["Which one is different? ‘sky, lake, gloves, tree’", "gloves", "sky", "lake", "tree"],
+["Which one is different? ‘stomach, back, snow, foot’", "snow", "stomach", "back", "foot"],
+["Which one is different? ‘bank, bookstore, T-shirt, bakery’", "T-shirt", "bank", "bookstore", "bakery"],
+["Which one is different? ‘mountain, sea, hair, wind’", "hair", "mountain", "sea", "wind"],
+["Which one is different? ‘bread, ship, rice, cheese’", "ship", "bread", "rice", "cheese"],
+["Which one is different? ‘lion, rice, elephant, butterfly’", "rice", "lion", "elephant", "butterfly"],
+["Which one is different? ‘bank, school, doctor, museum’", "doctor", "bank", "school", "museum"],
+["Which one is different? ‘math, history, scientist, art’", "scientist", "math", "history", "art"],
+["Which one is different? ‘restaurant, hospital, boots, bakery’", "boots", "restaurant", "hospital", "bakery"],
+["Which one is different? ‘fishing, soldier, artist, writer’", "fishing", "soldier", "artist", "writer"],
+["Which one is different? ‘tooth, back, social studies, knee’", "social studies", "tooth", "back", "knee"],
+["Which one is different? ‘jacket, soccer, gloves, T-shirt’", "soccer", "jacket", "gloves", "T-shirt"],
+["Which one is different? ‘pizza, forest, rain, mountain’", "pizza", "forest", "rain", "mountain"],
+["Which one is different? ‘spinach, garlic, science, carrot’", "science", "spinach", "garlic", "carrot"],
+["Which one is different? ‘pumpkin, potato, sneakers, corn’", "sneakers", "pumpkin", "potato", "corn"],
+["Which one is different? ‘soldier, music, Korean, math’", "soldier", "music", "Korean", "math"],
+["I ___ a student.", "am", "is", "are", "be"],
+["You ___ my best friend.", "are", "am", "is", "be"],
+["She ___ a teacher.", "is", "am", "are", "be"],
+["He ___ my brother.", "is", "am", "are", "be"],
+["We ___ very happy.", "are", "am", "is", "be"],
+["They ___ in the park.", "are", "am", "is", "be"],
+["It ___ a small cat.", "is", "am", "are", "be"],
+["This ___ my bag.", "is", "am", "are", "be"],
+["These ___ my shoes.", "are", "is", "am", "be"],
+["That ___ a big tree.", "is", "are", "am", "be"],
+["My father ___ a doctor.", "is", "am", "are", "be"],
+["The boys ___ at school.", "are", "is", "am", "be"],
+["___ you hungry?", "Are", "Is", "Am", "Do"],
+["___ she your sister?", "Is", "Are", "Am", "Do"],
+["I have ___ apple.", "an", "a", "two", "many"],
+["She has ___ book.", "a", "an", "two", "some"],
+["He eats ___ egg.", "an", "a", "two", "many"],
+["There is ___ umbrella.", "an", "a", "two", "some"],
+["It is ___ elephant.", "an", "a", "two", "many"],
+["I see ___ dog.", "a", "an", "two", "many"],
+["I want ___ orange.", "an", "a", "two", "many"],
+["Mina has ___ hour of homework.", "an", "a", "two", "many"],
+["one box, two ___", "boxes", "boxs", "boxies", "box"],
+["one child, two ___", "children", "childs", "childrens", "childes"],
+["one man, two ___", "men", "mans", "mens", "manes"],
+["one foot, two ___", "feet", "foots", "feets", "footes"],
+["one tooth, two ___", "teeth", "tooths", "teeths", "toothes"],
+["one mouse, two ___", "mice", "mouses", "mices", "mouse"],
+["one knife, two ___", "knives", "knifes", "knifies", "knife"],
+["one bus, two ___", "buses", "buss", "busies", "bus"],
+["one baby, two ___", "babies", "babys", "babyes", "baby"],
+["one dish, two ___", "dishes", "dishs", "dishies", "dish"],
+["one leaf, two ___", "leaves", "leafs", "leafes", "leaf"],
+["one woman, two ___", "women", "womans", "womens", "womanes"],
+["one sheep, two ___", "sheep", "sheeps", "sheepes", "sheepies"],
+["one watch, two ___", "watches", "watchs", "watchies", "watch"],
+["one city, two ___", "cities", "citys", "cityes", "city"],
+["one cat, three ___", "cats", "cates", "catties", "cat"],
+["I ___ a pencil.", "have", "has", "having", "am"],
+["She ___ a dog.", "has", "have", "having", "is"],
+["He ___ two sisters.", "has", "have", "having", "are"],
+["They ___ a new car.", "have", "has", "having", "is"],
+["My mom ___ long hair.", "has", "have", "having", "are"],
+["We ___ lunch at noon.", "have", "has", "having", "is"],
+["He ___ pizza.", "likes", "like", "liking", "are like"],
+["I ___ apples.", "like", "likes", "liking", "is like"],
+["My mom ___ flowers.", "likes", "like", "liking", "are like"],
+["They ___ soccer.", "like", "likes", "liking", "is like"],
+["___ you like pizza?", "Do", "Does", "Are", "Is"],
+["___ she play the piano?", "Does", "Do", "Is", "Are"],
+["___ they have a dog?", "Do", "Does", "Is", "Are"],
+["He ___ not like carrots.", "does", "do", "is", "are"],
+["I ___ not like spiders.", "do", "does", "is", "am"],
+["Birds can ___.", "fly", "flies", "flying", "to fly"],
+["Fish can ___.", "swim", "swims", "swimming", "to swim"],
+["She can ___ the piano.", "play", "plays", "playing", "to play"],
+["I can ___ fast.", "run", "runs", "running", "to run"],
+["He can’t ___ a bike.", "ride", "rides", "riding", "to ride"],
+["Can you ___ English?", "speak", "speaks", "speaking", "to speak"],
+["She is ___ a book.", "reading", "read", "reads", "to read"],
+["They are ___ soccer.", "playing", "play", "plays", "to play"],
+["I am ___ a letter.", "writing", "write", "writes", "to write"],
+["He is ___ now.", "sleeping", "sleep", "sleeps", "to sleep"],
+["We are ___ lunch.", "eating", "eat", "eats", "to eat"],
+["The dog is ___.", "running", "run", "runs", "runing"],
+["Mom is ___ dinner.", "cooking", "cook", "cooks", "cookes"],
+["The boys are ___.", "swimming", "swim", "swims", "swiming"],
+["He is ___ a cake.", "making", "make", "makes", "makeing"],
+["Look! It is ___.", "snowing", "snow", "snows", "to snow"],
+["Yesterday I ___ to school.", "went", "go", "goes", "going"],
+["She ___ a cake yesterday.", "made", "make", "makes", "making"],
+["We ___ pizza last night.", "ate", "eat", "eats", "eating"],
+["They ___ soccer yesterday.", "played", "play", "plays", "playing"],
+["I ___ my teeth this morning.", "brushed", "brush", "brushes", "brushing"],
+["He ___ a bird in the tree.", "saw", "see", "sees", "seeing"],
+["She ___ up early today.", "woke", "wake", "wakes", "waking"],
+["We ___ water after the game.", "drank", "drink", "drinks", "drinking"],
+["They ___ at the zoo last Sunday.", "were", "are", "is", "be"],
+["I ___ at home yesterday.", "was", "am", "are", "be"],
+["He ___ to music last night.", "listened", "listen", "listens", "listening"],
+["My dad ___ me a gift.", "gave", "give", "gives", "giving"],
+["I am going to ___ my grandma.", "visit", "visits", "visited", "visiting"],
+["It will ___ tomorrow.", "rain", "rains", "rained", "raining"],
+["We are going to ___ a picnic.", "have", "has", "had", "having"],
+["She will ___ here soon.", "come", "comes", "came", "coming"],
+["The cat is ___ the box. (상자 안에)", "in", "on", "under", "at"],
+["The book is ___ the desk. (책상 위에)", "on", "in", "under", "at"],
+["The ball is ___ the chair. (의자 아래에)", "under", "on", "in", "to"],
+["The bank is ___ the library. (도서관 옆에)", "next to", "on", "in", "at"],
+["The dog is ___ the house. (집 뒤에)", "behind", "in front", "between", "above"],
+["The cat is ___ the box. (상자 앞에)", "in front of", "behind", "under", "in"],
+["The park is ___ the school and the bank. (둘 사이)", "between", "behind", "on", "under"],
+["I go to school ___ bus.", "by", "on", "at", "in"],
+["I get up ___ seven.", "at", "in", "on", "of"],
+["My birthday is ___ May.", "in", "on", "at", "by"],
+["The class starts ___ Monday.", "on", "in", "at", "of"],
+["I was born ___ 2014.", "in", "on", "at", "of"],
+["She walks ___ school every morning.", "to", "at", "of", "with"],
+["___ is your name?", "What", "Who", "Where", "When"],
+["___ are you from?", "Where", "What", "Who", "Why"],
+["___ is your birthday?", "When", "Where", "Who", "How"],
+["___ is that boy? He is my brother.", "Who", "What", "Where", "How"],
+["___ old are you?", "How", "What", "Who", "Where"],
+["___ do you go to school? By bus.", "How", "What", "Who", "When"],
+["___ time is it?", "What", "Who", "Where", "How"],
+["___ is she crying? Because she is sad.", "Why", "What", "Who", "Where"],
+["___ many books do you have?", "How", "What", "Where", "When"],
+["___ much is this bag?", "How", "What", "Where", "Who"],
+["___ bag is this? It is mine.", "Whose", "Who", "What", "Where"],
+["How are you? — I’m ___.", "fine", "Monday", "ten", "a doctor"],
+["Nice to meet you. — Nice to meet ___, too.", "you", "I", "me", "your"],
+["What’s your name? — My name ___ Mina.", "is", "am", "are", "be"],
+["Where do you live? — I live ___ Seoul.", "in", "on", "at", "by"],
+["What do you do? — I’m a ___.", "teacher", "Monday", "sunny", "apple"],
+["What’s this? — It’s ___ eraser.", "an", "a", "two", "some"],
+["Is this your bag? — Yes, it ___.", "is", "am", "are", "do"],
+["Are you a student? — No, I ___ not.", "am", "is", "are", "do"],
+["Can you swim? — Yes, I ___.", "can", "do", "am", "is"],
+["What do you want? — I want ___ water.", "some", "a", "an", "many"],
+["Happy birthday! — ___ you.", "Thank", "Sorry", "Please", "Hello"],
+["How old are you? — I’m ten ___ old.", "years", "year", "ages", "times"],
+["What’s the weather like? — It’s ___.", "sunny", "Monday", "happy", "blue"],
+["Do you have a pen? — Yes, I ___.", "do", "am", "does", "can"],
+["Whose bag is this? — It’s ___.", "mine", "I", "my", "me"],
+["Which do you like, apples or oranges? — I like ___.", "apples", "a apple", "a apples", "an apples"],
+["What time do you get up? — I get up at ___.", "seven", "Monday", "May", "sunny"],
+["Good morning! — ___", "Good morning!", "Good night!", "See you!", "Goodbye!"],
+["Thank you. — ___", "You’re welcome.", "Good morning.", "See you later.", "I’m sorry."],
+["I’m sorry. — ___", "That’s okay.", "You’re welcome.", "Nice to meet you.", "Good night."],
+["Goodbye! — ___", "See you later.", "Nice to meet you.", "Good morning.", "Thank you very much."],
+["May I come in? — ___", "Sure, come in.", "Yes, I’m a doctor.", "It’s Monday.", "I’m fine."],
+["What’s the date today? — It’s May ___.", "fifth", "fiveth", "fivth", "fives"],
+["How much is it? — It’s five ___.", "dollars", "dollar", "dollared", "o’clock"],
+["Where is my cap? — It’s ___ the desk.", "on", "to", "of", "with"],
+["Is he a doctor? — No, he ___.", "isn’t", "aren’t", "don’t", "am not"],
+["What day comes after Monday?", "Tuesday", "Sunday", "Wednesday", "Friday"],
+["What month comes after March?", "April", "May", "February", "June"],
+["What season comes after summer?", "autumn", "spring", "winter", "summer"],
+["How many days are in a week?", "seven", "five", "six", "eight"],
+["How many months are in a year?", "twelve", "ten", "eleven", "thirteen"],
+["What color do you get from blue and yellow?", "green", "purple", "orange", "brown"],
+["What color do you get from red and white?", "pink", "green", "gray", "brown"],
+["Which animal can fly?", "bird", "dog", "fish", "cow"],
+["Which animal lives in the sea?", "whale", "horse", "tiger", "rabbit"],
+["We use a pencil to ___.", "write", "eat", "sleep", "swim"],
+["We use a spoon to ___.", "eat soup", "write a letter", "cut paper", "open a door"],
+["We use scissors to ___.", "cut paper", "drink water", "read a book", "brush teeth"],
+["We use an umbrella on a ___ day.", "rainy", "sunny", "hungry", "sleepy"],
+["We wear a coat when it is ___.", "cold", "hot", "sunny", "hungry"],
+["We go to bed when we are ___.", "sleepy", "hungry", "thirsty", "angry"],
+["We eat lunch at ___.", "noon", "midnight", "night", "dawn"],
+["The sun comes out in the ___.", "morning", "midnight", "night", "dark"],
+["A baby cat is called a ___.", "kitten", "puppy", "calf", "chick"],
+["A baby dog is called a ___.", "puppy", "kitten", "calf", "chick"],
+["A doctor works in a ___.", "hospital", "bakery", "library", "zoo"],
+["A baker works in a ___.", "bakery", "hospital", "bank", "airport"],
+["We borrow books from a ___.", "library", "bakery", "bank", "station"],
+["We take a train at the ___.", "station", "bakery", "museum", "church"],
+["We see animals at the ___.", "zoo", "bank", "library", "school"],
+["We learn English at ___.", "school", "the zoo", "the airport", "the bakery"],
+["‘나는 학생입니다.’를 영어로?", "I am a student.", "I am a teacher.", "He is a student.", "You are a student."],
+["‘그녀는 책을 읽고 있어요.’를 영어로?", "She is reading a book.", "She is writing a book.", "He is reading a book.", "She reads a book yesterday."],
+["‘이것은 내 가방이에요.’를 영어로?", "This is my bag.", "That is my bag.", "This is your bag.", "These are my bags."],
+["‘나는 사과를 좋아해요.’를 영어로?", "I like apples.", "I likes apples.", "He likes apples.", "I like an apples."],
+["‘너는 수영할 수 있니?’를 영어로?", "Can you swim?", "Do you swim can?", "Are you swim?", "You can swim?"],
+["‘우리는 공원에 갈 거예요.’를 영어로?", "We are going to go to the park.", "We went to the park.", "We go park to.", "We are the park."],
+["‘그는 매일 아침 일찍 일어나요.’를 영어로?", "He gets up early every morning.", "He get up early every morning.", "He getting up early every morning.", "He got up early every morning."],
+["‘지금 몇 시예요?’를 영어로?", "What time is it?", "What day is it?", "Who time is it?", "How time is it?"],
+["‘이름이 뭐예요?’를 영어로?", "What is your name?", "Where is your name?", "Who is your name?", "How is your name?"],
+["‘학교는 어디에 있어요?’를 영어로?", "Where is the school?", "What is the school?", "Who is the school?", "When is the school?"],
+["‘저는 열 살이에요.’를 영어로?", "I am ten years old.", "I have ten years old.", "I am ten year.", "I am ten old years."],
+["‘그것은 얼마예요?’를 영어로?", "How much is it?", "How many is it?", "What much is it?", "How long is it?"],
+["‘생일 축하해!’를 영어로?", "Happy birthday!", "Good morning!", "Thank you!", "See you!"],
+["‘만나서 반가워요.’를 영어로?", "Nice to meet you.", "Nice to see you yesterday.", "Good to meet me.", "Nice meet you."],
+["‘저는 아침으로 빵을 먹어요.’를 영어로?", "I eat bread for breakfast.", "I eat breakfast for bread.", "I eats bread for breakfast.", "I eat bread to breakfast."],
+["‘고양이가 상자 안에 있어요.’를 영어로?", "The cat is in the box.", "The cat is on the box.", "The cat is under the box.", "The cat are in the box."],
+["‘오늘은 날씨가 맑아요.’를 영어로?", "It is sunny today.", "It is rainy today.", "It are sunny today.", "It sunny is today."],
+["‘나는 어제 친구와 축구를 했어요.’를 영어로?", "I played soccer with my friend yesterday.", "I play soccer with my friend yesterday.", "I playing soccer with my friend yesterday.", "I plays soccer with my friend yesterday."],
+["‘그녀는 노래를 잘 불러요.’를 영어로?", "She sings well.", "She sing well.", "She singing well.", "She sings good well."],
+["‘도서관은 은행 옆에 있어요.’를 영어로?", "The library is next to the bank.", "The library is in the bank.", "The library is next the bank.", "The library are next to the bank."],
+["‘왼쪽으로 도세요.’를 영어로?", "Turn left.", "Turn right.", "Go straight.", "Stop here."],
+["‘저는 강아지 두 마리가 있어요.’를 영어로?", "I have two dogs.", "I has two dogs.", "I have two dog.", "I am two dogs."],
+["‘What do you want to be?’의 뜻은?", "너는 무엇이 되고 싶니?", "너는 무엇을 먹고 싶니?", "너는 어디에 가고 싶니?", "너는 누구를 좋아하니?"],
+["‘I am hungry.’의 뜻은?", "나는 배가 고파요.", "나는 졸려요.", "나는 목말라요.", "나는 화가 났어요."],
+["‘Let’s go to the zoo.’의 뜻은?", "동물원에 가자.", "동물원에서 만나요.", "동물원은 멀어요.", "나는 동물을 좋아해요."],
+["‘Wash your hands.’의 뜻은?", "손을 씻으세요.", "발을 씻으세요.", "손을 흔드세요.", "앉으세요."],
+["‘Be quiet, please.’의 뜻은?", "조용히 해 주세요.", "빨리 오세요.", "문을 닫아 주세요.", "일어나 주세요."],
+["‘Excuse me.’는 언제 쓰나요?", "말을 걸거나 양해를 구할 때", "작별 인사를 할 때", "생일을 축하할 때", "음식을 먹을 때"],
+["‘Good night.’은 언제 쓰나요?", "자기 전에 인사할 때", "아침에 만났을 때", "점심을 먹을 때", "처음 만났을 때"],
+["‘It’s raining.’의 뜻은?", "비가 오고 있어요.", "눈이 오고 있어요.", "바람이 불어요.", "날씨가 맑아요."]
+];
+const W={
+ sword:{n:"검",t:"근접 강타",dmg:35,cd:.45,sp:520,life:.16,r:34,col:"#e5e7eb"},
+ bow:{n:"활",t:"멀리 정확하게",dmg:22,cd:.55,sp:760,life:1.1,r:7,col:"#fbbf24"},
+ gun:{n:"총",t:"빠른 연사",dmg:10,cd:.14,sp:900,life:.8,r:5,col:"#f87171"},
+ magic:{n:"마법",t:"느리지만 큼직",dmg:30,cd:.9,sp:300,life:1.8,r:16,col:"#a78bfa"},
+ dagger:{n:"단검",t:"기본 무기",dmg:15,cd:.4,sp:650,life:.6,r:11,col:"#9ca3af"},
+ flame:{n:"",t:"",dmg:18,cd:0,sp:420,life:.7,r:14,col:"#fb923c"},
+ sup1:{n:"번개창",t:"",dmg:45,cd:.5,sp:1200,life:1,r:12,col:"#fde047"},
+ sup2:{n:"메테오",t:"",dmg:60,cd:1.2,sp:350,life:2,r:40,col:"#fb7185"},
+ sup3:{n:"천공포",t:"",dmg:25,cd:.08,sp:1000,life:.9,r:8,col:"#67e8f9"},
+ wave:{n:"",t:"",dmg:30,cd:0,sp:520,life:.9,r:22,col:"#38bdf8"},
+ bolt:{n:"",dmg:20,cd:0,sp:1300,life:.8,r:9,col:"#fde047"},
+ shard:{n:"",dmg:13,cd:0,sp:700,life:.9,r:9,col:"#bae6fd",sl:1},
+ icebl:{n:"",dmg:18,cd:0,sp:520,life:1,r:16,col:"#7dd3fc",fz:1.2},
+ toxin:{n:"",dmg:7,cd:0,sp:480,life:1.2,r:14,col:"#a3e635",ps:1},
+ rock:{n:"",dmg:20,cd:0,sp:420,life:.9,r:16,col:"#a8a29e",sl:1},
+ bigrock:{n:"",dmg:65,cd:0,sp:260,life:2.5,r:55,col:"#78716c"},
+ beam:{n:"",dmg:11,cd:0,sp:1500,life:.7,r:6,col:"#fef08a"}
+};
+const COL=["#ef4444","#3b82f6","#22c55e","#f59e0b","#a855f7","#ec4899","#14b8a6","#f97316"];
+const col=c=>COL[(+c||0)&7];
+const CH={
+ fire:{n:"불",t:"능력: 화염 폭발(사방 8발) · 공격력 +15%",dm:1.15,sp:240,tk:1,cd:1},
+ wind:{n:"바람",t:"능력: 질주(순간 대시+무적 0.4초) · 이동속도 +15%",dm:1,sp:275,tk:1,cd:1},
+ forest:{n:"숲",t:"능력: 치유(HP +40) · 받는 피해 -20%",dm:1,sp:240,tk:.8,cd:1},
+ water:{n:"물",t:"능력: 물 방패(2.5초 무적) · 공격 속도 +20%",dm:1,sp:240,tk:1,cd:.8},
+ thunder:{n:"번개",t:"능력: 연쇄 번개(3연발) · 공격 속도 +10%",dm:1,sp:255,tk:1,cd:.9,sc:7},
+ ice:{n:"얼음",t:"능력: 서리 파편(감속) · 받는 피해 -10%",dm:1.05,sp:240,tk:.9,cd:1,sc:9},
+ poison:{n:"독",t:"능력: 독 구름(지속 피해) · 킬하면 HP +20",dm:1,sp:245,tk:1,cd:1,sc:9},
+ shadow:{n:"어둠",t:"능력: 그림자 이동(순간이동) · 공격력 +10%, 받는 피해 +10%",dm:1.1,sp:265,tk:1.1,cd:1,sc:8},
+ earth:{n:"대지",t:"능력: 지진파(10방향 바위) · 받는 피해 -25%",dm:1,sp:225,tk:.75,cd:1,sc:11},
+ light:{n:"빛",t:"능력: 섬광(6연발) · HP 자동 재생",dm:1,sp:240,tk:1,cd:1,sc:9}
+};
+let UID="";
+try{UID=localStorage.getItem("eb_uid")||"";if(!UID){UID=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem("eb_uid",UID)}}catch(e){UID=Math.random().toString(36).slice(2)}
+const banGet=()=>{try{return JSON.parse(localStorage.getItem("eb_ban")||"[]")}catch(e){return[]}};
+const banSet=a=>{try{localStorage.setItem("eb_ban",JSON.stringify(a))}catch(e){}};
+const chOf=k=>Object.prototype.hasOwnProperty.call(CH,k)?CH[k]:CH.fire;
+const hasK=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
+const UL={fire:"화염 폭풍",wind:"태풍",forest:"숲의 가호",water:"해일",thunder:"천둥 폭풍",ice:"빙결 폭발",poison:"맹독 폭발",shadow:"암흑 습격",earth:"대지의 분노",light:"성스러운 빛"};
+const LV=[null,{d:1,r:1,c:1},{d:1.3,r:1.15,c:.9},{d:1.7,r:1.3,c:.8}];
+const WN={dagger:["단검","강철 단검","암살자의 단검"],sword:["검","강철 검","전설의 검"],bow:["활","장궁","불꽃 장궁"],gun:["총","강화 총","레이저 총"],magic:["마법","고급 마법","대마법"],sup1:["번개창","천둥창","신의 번개창"],sup2:["메테오","대형 메테오","운석 대재앙"],sup3:["천공포","강화 천공포","초월 천공포"]};
+const WK=Object.keys(WN);
+const IT={spd:{e:"",n:"속도 증가",c:"#fde047"},shd:{e:"",n:"방어막",c:"#7dd3fc"},hp:{e:"",n:"체력 회복",c:"#4ade80"},pow:{e:"",n:"파워 업",c:"#fb7185"},orb:{e:"",n:"무기 구슬",c:"#c084fc"}};
+
+const AW=1800,AH=1120,PR=16,FIGHT=90,SKCD=10,QN=5,QR=3;
+const prng=sd=>()=>(sd=(sd*1664525+1013904223)>>>0)/4294967296;
+function scatter(seed,n,sz){const r=prng(seed),o=[];let t=0;while(o.length<n&&t++<3000){const x=90+r()*(AW-180),y=90+r()*(AH-180);if(Math.hypot(x-AW/2,y-AH/2)<110||o.some(p=>Math.hypot(p[0]-x,p[1]-y)<120))continue;o.push([Math.round(x),Math.round(y),sz,sz])}return o}
+const MAPS={
+ plain:{n:"평원 (넓고 탁 트임)",bg:"#4d7c4a",gl:"rgba(255,255,255,.14)",sky:"#8fc1f2",wc:"#94a3b8",wh:70,w:scatter(11,10,54),hz:[]},
+ forest:{n:"숲속 (나무가 빽빽)",bg:"#2f5a35",gl:"rgba(0,0,0,.18)",sky:"#a9d8b4",wc:"#6b4423",wh:45,tree:1,w:scatter(7,34,34),hz:[]},
+ ice:{n:"얼음 성 (벽과 기둥)",bg:"#d6ecfa",gl:"rgba(70,130,200,.3)",sky:"#c6e0f5",wc:"#7cc4f5",wh:120,hz:[],
+  w:[[300,200,30,360],[1470,560,30,360],[620,500,560,60],[840,120,120,260],[840,740,120,260],[150,820,300,30],[1350,270,300,30],[560,860,30,200],[1210,160,30,200]]},
+ lava:{n:"용암 지대 (중앙 위험)",bg:"#4a2820",gl:"rgba(255,140,60,.22)",sky:"#40160f",wc:"#78716c",wh:100,hz:[[700,380,400,360]],
+  w:[[220,220,100,100],[1480,220,100,100],[220,800,100,100],[1480,800,100,100],[820,120,160,50],[820,950,160,50],[120,540,50,160],[1630,420,50,160]]}
+};
+const rnd=n=>Math.floor(Math.random()*n);
+const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+const show=id=>{document.body.classList.toggle("ingame",id==="game");document.querySelectorAll(".scr").forEach(s=>s.classList.toggle("hide",s.id!==id))};
+const msg=t=>{$("msg").textContent=t};
+const ctx=$("cv").getContext("2d");
+
+let R=null,room=null,offs=[],isHost=false,seq=0,curSeq=-1,phase="lobby",qStart=0,fightStart=0,hostLost=0,myId=null;
+let me,projs=[],items=[],nextItem=0,iid=0,MAP=MAPS.plain,keys={},mouse={x:450,y:280,down:false},t0=0,last=0,pAt=0,raf=0,nextMq=0,mqT=0,lsig="",esig="",warned=false;
+const fresh=()=>({n:"",c:0,x:450,y:280,hp:100,k:0,d:0,w:"dagger",al:1,rd:0,a:0,resp:0,inv:0,cd:0,ch:"fire",sk:0,ug:0,tf:0,fv:0,spd:0,dbo:0,wl:1,slow:0,frz:0,psn:0,hid:0,dh:0,qs:0,rq:0});
+me=fresh();
+
+function push(o){
+  Object.assign(me,o||{});
+  if(!room)return;
+  room.presence({n:me.n,c:me.c,x:Math.round(me.x),y:Math.round(me.y),hp:Math.max(0,Math.round(me.hp)),k:me.k,d:me.d,w:me.w,al:me.al,rd:me.rd,ch:me.ch,u:UID,wl:me.wl,qs:me.qs,hd:me.hid>0?1:0,sh:me.inv>0?1:0,a:+me.a.toFixed(2)}).catch(()=>{});
+}
+const setPhase=p=>{seq++;room.presence({host:1,phase:p,seq}).catch(()=>{})};
+const myPeer=()=>room&&room.peers().find(p=>p.isMe&&p.sameTab);
+
+// ===== 퀴즈 =====
+let qUsed=[],wIv=0,qTok=0;
+const qSeen=new Set();
+function pickQ(){if(qSeen.size>=Q.length-8)qSeen.clear();let q;do{q=Q[rnd(Q.length)]}while(qSeen.has(q));qSeen.add(q);return q}
+function renderQ(box,title,cb){
+  const q=pickQ(),ch=shuf(q.slice(1));
+  box.innerHTML="";
+  if(title){const t=document.createElement("div");t.className="mut small";t.textContent=title;box.appendChild(t)}
+  const h=document.createElement("div");h.className="qq";h.textContent=q[0];box.appendChild(h);
+  let done=false;
+  ch.forEach((c,i)=>{
+    const b=document.createElement("button");b.className="btn opt";b.textContent=(i+1)+") "+c;
+    b.onclick=()=>{if(done)return;done=true;const ok=c===q[1];b.classList.add(ok?"ok":"bad");sfx(ok?"snd_ok":"snd_bad");cb(ok)};
+    box.appendChild(b);
+  });
+}
+function wait(box,text){box.innerHTML="";const p=document.createElement("div");p.className="qq";p.textContent=text;box.appendChild(p);push({rd:1})}
+function runQuiz(box,n,done){
+  const tk=qTok;let i=0,c=0;qUsed=[];
+  const next=()=>{
+    if(tk!==qTok)return;
+    if(i>=n)return done(c);
+    i++;renderQ(box,"문제 "+i+"/"+n+" · 지금까지 정답 "+c+"개",ok=>{if(tk!==qTok)return;if(ok)c++;setTimeout(next,550)});
+  };
+  next();
+}
+// 정답 수에 따라 무기 선택지가 달라지고, 20초 안에 안 고르면 영구 차단(방장이 판정)
+function weaponStage(box,c,n,done){
+  const tk=qTok,r=c/n,opts=r>=.6?["sword","bow","gun","magic"]:r>=.2?["sword","bow"]:null,bonus=r>=.8?2:1;
+  box.innerHTML="";
+  const h=document.createElement("div");h.className="qq";box.appendChild(h);
+  if(!opts){me.w="dagger";me.wl=1;h.textContent="정답 "+c+"/"+n+" — 단검으로 시작해요";setTimeout(()=>{if(tk===qTok)done()},1500);return}
+  h.textContent="정답 "+c+"/"+n+" — 무기를 고르세요!"+(bonus>1?" (보너스: Lv.2로 시작)":"");
+  const tm=document.createElement("div");tm.style.cssText="font-weight:700;color:var(--bad);margin-bottom:8px";box.appendChild(tm);
+  let left=20,dn=false;const show=()=>{tm.textContent=""+left+"초 안에 고르지 않으면 영구 차단돼요!"};show();
+  opts.forEach(k=>{const w=W[k],b=document.createElement("button");b.className="btn opt";b.className="btn opt wp";{const ic=cvs(120,48,g=>drawWeapon(g,k,120,48)),sp=document.createElement("span");sp.textContent=w.n+" · "+w.t+" · 피해 "+w.dmg;b.append(ic,sp)}
+    b.onclick=()=>{if(dn||tk!==qTok)return;dn=true;clearInterval(wIv);me.w=k;me.wl=bonus;me.qs=0;push({});done()};box.appendChild(b)});
+  me.qs=1;push({});clearInterval(wIv);
+  wIv=setInterval(()=>{
+    if(tk!==qTok){clearInterval(wIv);return}
+    if(--left>0){show();return}
+    clearInterval(wIv);dn=true;
+    if(isHost){me.w="dagger";me.wl=1;me.qs=0;push({});done()}
+    else tm.textContent="시간 초과! 차단 처리 중…";
+  },1000);
+}
+function startQuiz(){
+  const box=$("qbox");
+  runQuiz(box,QN,c=>weaponStage(box,c,QN,()=>wait(box,"준비 완료! "+wname(me.w,me.wl)+" · 친구들을 기다리는 중…")));
+}
+function startRespQuiz(){
+  me.rq=1;hideMq();if(document.exitPointerLock)document.exitPointerLock();const box=$("rq");box.classList.remove("hide");
+  runQuiz(box,QR,c=>weaponStage(box,c,QR,finishResp));
+}
+function finishResp(){
+  $("rq").classList.add("hide");if(phase!=="fight")return;
+  spawn();me.inv=1.5;me.rq=0;push({});flash("부활! "+wname(me.w,me.wl));
+}
+const qsT={};
+function timeoutBan(p){
+  const nm=String(p.presence.n||"?"),u=p.presence.u,b=banGet();
+  if(u&&!b.some(x=>x.u===u)){b.push({u,n:nm});banSet(b)}
+  modKick(p.peer,"tban");asig="";
+  room.emit("adm",{to:"*",cmd:"msg",t:""+nm+" 님이 무기를 20초 안에 고르지 않아 차단됐어요"}).catch(()=>{});
+}
+function qsScan(ps){
+  const now=Date.now();
+  for(const p of ps){
+    if(p.isMe||p.kind!=="viewer")continue;
+    const on=p.presence&&p.presence.qs&&(phase==="quiz"||phase==="fight");
+    if(!on){delete qsT[p.peer];continue}
+    if(!qsT[p.peer])qsT[p.peer]=now;else if(now-qsT[p.peer]>21500){delete qsT[p.peer];timeoutBan(p)}
+  }
+}
+
+function buildCh(){
+  const L=$("chs");L.innerHTML="";
+  const t=document.createElement("div");t.className="lab";t.textContent="요원(캐릭터) 선택";L.appendChild(t);
+  const g=document.createElement("div");g.className="agents";
+  Object.keys(CH).forEach(k=>{
+    const b=document.createElement("button");b.className="ag"+(me.ch===k?" sel":"");
+    const c=cvs(56,56,(q)=>drawChar(q,k,56)),n=document.createElement("span");n.textContent=CH[k].n;
+    b.append(c,n);b.onclick=()=>{me.ch=k;push({});buildCh()};g.appendChild(b);
+  });
+  L.appendChild(g);
+  const c=chOf(me.ch),d=document.createElement("div");d.className="agd";
+  const h=document.createElement("div");h.className="agn";h.textContent=c.n;
+  const a=document.createElement("div");a.textContent="능력(E) : "+c.t.replace(/^능력: ?/,"");
+  const u=document.createElement("div");u.textContent="궁극기(Q) : "+UL[me.ch];
+  const s=document.createElement("div");s.className="mut";s.textContent="공용 : SHIFT 구르기 (쿨타임 4초)";
+  d.append(h,a,u,s);L.appendChild(d);
+}
+// ===== 운영자 패널 (방장 전용) =====
+const hasW=k=>Object.prototype.hasOwnProperty.call(W,k);
+function applyAdm(d){
+  if(d.cmd==="kick")return leave("방장이 당신을 내보냈어요.");
+  if(d.cmd==="ban")return leave("이 방에서 영구 차단되었어요.");
+  if(d.cmd==="tban")return leave("무기를 20초 안에 고르지 않아 영구 차단되었어요.");
+  if(d.cmd==="w"&&hasW(d.w)){me.w=d.w;me.wl=1;push({});flash("운영자가 "+W[d.w].n+" 지급!")}
+  if(d.cmd==="h"){me.hp=100;push({});flash("운영자가 체력을 회복시켰어요!")}
+  if(d.cmd==="msg")popup(""+String(d.t||"").slice(0,80));
+  if(d.cmd==="frz"){me.frz=cl(+d.s||3,0,10);flash("얼어붙었어요!")}
+  if(d.cmd==="dmg"&&me.al){me.hp-=cl(+d.n||0,0,999);push({});if(me.hp<=0)die(null)}
+}
+const admRecv=m=>{const d=m.data;if(m.peer==="H"&&d&&myId&&(d.to===myId||d.to==="*"))applyAdm(d)};
+const kk={};
+function modKick(id,why){
+  if(kk[id])return;kk[id]=1;setTimeout(()=>delete kk[id],3000);
+  room.emit("adm",{to:id,cmd:why});setTimeout(()=>room&&room.kick&&room.kick(id),400);
+}
+function banScan(ps){
+  const bl=banGet();if(!bl.length)return;
+  for(const p of ps){if(p.isMe||p.kind!=="viewer")continue;const u=p.presence&&p.presence.u;if(u&&bl.some(b=>b.u===u))modKick(p.peer,"ban")}
+}
+let asig="";
+function admRows(){
+  const A=$("adm");if(!isHost||!DEV||!room||A.classList.contains("hide"))return;
+  const ps=room.peers().filter(p=>p.kind==="viewer"),bl=banGet();
+  const sig=ps.map(p=>p.peer+p.presence.n).join()+"|"+bl.map(b=>b.u).join()+phase;
+  if(sig===asig)return;asig=sig;
+  A.innerHTML="";
+  const mk=(par,txt,fn)=>{const b=document.createElement("button");b.className="btn alt";b.style.cssText="padding:6px 9px;font-size:14px;margin:2px";b.textContent=txt;b.onclick=()=>{fn();b.blur()};par.appendChild(b)};
+  const h=document.createElement("div");h.className="qq";h.textContent="운영자 패널";A.appendChild(h);
+  ps.forEach(p=>{
+    const nm=String(p.presence.n||"…"),row=document.createElement("div");row.className="pl";row.style.flexWrap="wrap";
+    const t=document.createElement("span");t.style.flex="1 1 100%";t.textContent=chOf(p.presence.ch).n+" "+nm+(p.isMe?" (나)":"");row.appendChild(t);
+    const send=o=>p.isMe?applyAdm(o):room.emit("adm",Object.assign({to:p.peer},o));
+    mk(row,"번개창",()=>send({cmd:"w",w:"sup1"}));mk(row,"메테오",()=>send({cmd:"w",w:"sup2"}));mk(row,"천공포",()=>send({cmd:"w",w:"sup3"}));
+    mk(row,"회복",()=>send({cmd:"h"}));
+    if(!p.isMe){
+      mk(row,"내보내기",()=>{if(confirm(nm+" 님을 내보낼까요?"))modKick(p.peer,"kick")});
+      mk(row,"영구밴",()=>{
+        if(!confirm(nm+" 님을 영구 차단할까요?"))return;
+        const u=p.presence.u,b2=banGet();
+        if(u&&!b2.some(b=>b.u===u)){b2.push({u,n:nm});banSet(b2)}
+        modKick(p.peer,"ban");asig="";
+      });
+    }
+    A.appendChild(row);
+  });
+  const g=document.createElement("div");g.style.marginTop="8px";
+  if(phase==="fight")mk(g,"게임 종료",()=>setPhase("end"));
+  if(phase!=="lobby")mk(g,"대기실로",()=>setPhase("lobby"));
+  A.appendChild(g);
+  const bt=document.createElement("div");bt.className="mut small";bt.style.marginTop="10px";bt.textContent="차단 목록 ("+bl.length+"명) — 이 브라우저에 저장돼요";A.appendChild(bt);
+  bl.forEach(b=>{const r=document.createElement("div");r.className="pl";const sp=document.createElement("span");sp.style.flex="1";sp.textContent=""+String(b.n||"?");r.appendChild(sp);
+    mk(r,"해제",()=>{banSet(banGet().filter(x=>x.u!==b.u));asig=""});A.appendChild(r)});
+}
+$("admb").onclick=()=>{$("adm").classList.toggle("hide");asig="";admRows()};
+// ===== 대기실 / 결과 =====
+function drawLobby(ps){
+  const v=ps.filter(p=>p.kind==="viewer"),hp=hostP(),sig=v.map(p=>p.peer+p.presence.n+p.presence.host+p.presence.ch).join()+mapKey()+hp.bn+","+hp.bd;
+  if(sig===lsig)return;lsig=sig;
+  const L=$("plist");L.innerHTML="";
+  v.forEach(p=>{
+    const d=document.createElement("div");d.className="pl";d.style.borderLeftColor=col(p.presence.c);
+    const i=cvs(34,34,g=>drawChar(g,p.presence.ch,34));i.className="pi";
+    const s=document.createElement("span");s.textContent=(p.presence.host?"[방장] ":"")+(p.presence.n||"…")+(p.isMe&&p.sameTab?" (나)":"")+(p.presence.bot?" [CPU]":"");
+    d.append(i,s);L.appendChild(d);
+  });
+  $("cnt").textContent=v.length+"명";buildMaps();buildBots();
+}
+function drawEnd(ps){
+  const v=ps.filter(p=>p.kind==="viewer").map(p=>({n:String(p.presence.n||"…"),k:p.presence.k|0,d:p.presence.d|0,c:p.presence.c,me:p.isMe&&p.sameTab})).sort((a,b)=>b.k-a.k||a.d-b.d);
+  const sig=JSON.stringify(v);if(sig===esig)return;esig=sig;
+  const L=$("board");L.innerHTML="";
+  v.forEach((r,i)=>{const d=document.createElement("div");d.className="pl";d.style.borderLeftColor=i===0?"#ff4655":col(r.c);
+    const s=document.createElement("span");s.style.flex="1";s.textContent=(i+1)+"위  "+r.n+(r.me?" (나)":"");
+    const k=document.createElement("b");k.textContent=r.k+" 킬 / "+r.d+" 데스";d.append(s,k);L.appendChild(d)});
+}
+
+// ===== 단계 전환 =====
+function enter(p){
+  bgmFor(p);
+  qTok++;clearInterval(wIv);$("rq").classList.add("hide");if(me.qs){me.qs=0;push({})}
+  phase=p;
+  if(p==="lobby"){push({rd:0,k:0,d:0,hp:100,al:1});buildCh();buildMaps();lsig="";$("st").classList.toggle("hide",!isHost);$("lw").classList.toggle("hide",isHost);show("lobby")}
+  else if(p==="quiz"){qStart=Date.now();push({rd:0,k:0,d:0,hp:100,w:"dagger",wl:1,al:1});show("quiz");startQuiz()}
+  else if(p==="fight")startFight();
+  else if(p==="end"){cancelAnimationFrame(raf);esig="";$("again").classList.toggle("hide",!isHost);$("ew").classList.toggle("hide",isHost);show("end")}
+}
+function tick(){
+  if(!room)return;
+  if(!myId){const m0=myPeer();if(m0)myId=m0.peer}
+  const ps=room.peers(),host=ps.find(p=>p.presence&&p.presence.host);
+  if(!host){if(++hostLost>20)return leave("방장이 나가서 방이 닫혔어요.")}else hostLost=0;
+  if(host&&host.presence.seq!==curSeq){curSeq=host.presence.seq;enter(host.presence.phase)}
+  if(phase==="lobby")drawLobby(ps);
+  if(phase==="end")drawEnd(ps);
+  if(isHost){
+    syncBots();banScan(ps);qsScan(ps);admRows();
+    if(phase==="quiz"&&Date.now()-qStart>3000&&(ps.filter(p=>p.kind==="viewer").every(p=>p.presence.rd)||Date.now()-qStart>90000))setPhase("fight");
+    if(phase==="fight"&&Date.now()-fightStart>FIGHT*1000)setPhase("end");
+  }
+}
+setInterval(tick,150);
+
+// ===== 전투 =====
+function spawn(){let n=0;do{me.x=60+rnd(AW-120);me.y=60+rnd(AH-120)}while(inWall(me.x,me.y,PR+8)&&++n<40);me.hp=100;me.al=1;me.resp=0}
+function startFight(){
+  projs=[];items=[];MAP=MAPS[mapKey()];if(isHost)resetBots();spawn();me.inv=2;me.cd=0;me.sk=0;me.ug=me.tf=me.fv=me.spd=me.dbo=me.slow=me.frz=me.psn=me.hid=me.dh=me.rq=0;nextItem=performance.now()+4000;fightStart=Date.now();t0=last=performance.now();nextMq=t0+20000;
+  $("mq").classList.add("hide");$("feed").textContent="";show("game");push({});pitch=0;ensure3D();build3D();resize3D();
+  cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);
+}
+function addProj(o,s){
+  const w=W[s.w],L=LV[s.l|0]||LV[1];
+  projs.push({o,x:s.x+Math.cos(s.a)*PR,y:s.y+Math.sin(s.a)*PR,vx:Math.cos(s.a)*w.sp,vy:Math.sin(s.a)*w.sp,r:w.r*L.r,dmg:w.dmg*chOf(s.ch).dm*(s.bo?1.8:1)*L.d,k:s.w,life:w.life,col:w.col,sw:s.w==="sword"});
+}
+function fire(){
+  const w=W[me.w];if(!myId)return;kick=1;muz=.07;sfxShot(me.w,.8);me.cd=w.cd*chOf(me.ch).cd*(me.tf>0?.5:1)*(LV[me.wl|0]||LV[1]).c;
+  const s={x:Math.round(me.x),y:Math.round(me.y),a:+me.a.toFixed(3),w:me.w,ch:me.ch,bo:me.dbo>0?1:0,l:me.wl};
+  addProj(myId,s);
+  room.emit("shot",s).catch(e=>{if(e&&e.code==="not_permitted"&&!warned){warned=true;$("feed").textContent="이 계정은 공격 권한이 없어요 (공유 권한을 확인하세요)"}});
+}
+function hideMq(){$("mq").classList.add("hide");clearTimeout(mqT);nextMq=performance.now()+25000}
+function showMq(){
+  const b=$("mq");b.classList.remove("hide");
+  renderQ(b,"보너스 퀴즈 (1~4 키) · 정답이면 HP +35",ok=>{
+    if(ok){me.hp=Math.min(100,me.hp+35);flash("정답! HP +35 ")}else flash("오답!");
+    setTimeout(hideMq,600);
+  });
+  mqT=setTimeout(hideMq,9000);
+}
+const mapKey=()=>{const h=room&&room.peers().find(p=>p.presence&&p.presence.host);const k=h&&h.presence.map;return hasK(MAPS,k)?k:"plain"};
+function buildMaps(){
+  const L=$("maps");L.innerHTML="";
+  const t=document.createElement("div");t.className="lab";t.textContent=isHost?"맵 선택":"맵 (방장이 선택)";L.appendChild(t);
+  const cur=mapKey();
+  Object.keys(MAPS).forEach(k=>{const b=document.createElement("button");b.className="btn opt"+(cur===k?" sel":"");b.textContent=MAPS[k].n;
+    if(isHost)b.onclick=()=>{room.presence({map:k});buildMaps()};else b.disabled=true;L.appendChild(b)});
+}
+function buildBots(){
+  const L=$("bots");L.innerHTML="";
+  const hp=hostP(),n=cl(+hp.bn|0,0,6),dd=cl(+hp.bd|0,0,2);
+  const t=document.createElement("div");t.className="lab";t.textContent=isHost?"CPU 설정":"CPU (방장이 설정)";L.appendChild(t);
+  const mk=(par,txt,fn,on)=>{const b=document.createElement("button");b.className="btn alt"+(on?" sel2":"");b.textContent=txt;if(isHost)b.onclick=fn;else b.disabled=true;par.appendChild(b)};
+  const r=document.createElement("div");r.className="row";
+  mk(r,"-",()=>room.presence({bn:Math.max(0,n-1)}));
+  const c=document.createElement("div");c.className="bn";c.textContent="CPU "+n+"명";r.appendChild(c);
+  mk(r,"+",()=>room.presence({bn:Math.min(6,n+1)}));L.appendChild(r);
+  const r2=document.createElement("div");r2.className="row";r2.style.marginTop="10px";
+  BD.forEach((x,i)=>mk(r2,x.n,()=>room.presence({bd:i}),dd===i));L.appendChild(r2);
+}
+function inWall(x,y,r){return MAP.w.some(([a,b,w,h])=>x>a-r&&x<a+w+r&&y>b-r&&y<b+h+r)||MAP.hz.some(([a,b,w,h])=>x>a&&x<a+w&&y>b&&y<b+h)}
+function wallPush(o){
+  o=o||me;
+  for(const [x,y,w,h] of MAP.w){
+    const cx=cl(o.x,x,x+w),cy=cl(o.y,y,y+h),dx=o.x-cx,dy=o.y-cy,d=Math.hypot(dx,dy);
+    if(d<PR){if(d===0)o.y=y-PR;else{o.x=cx+dx/d*PR;o.y=cy+dy/d*PR}}
+  }
+}
+function spawnItem(ty){
+  const ks=Object.keys(IT).concat(["orb"]);let x,y,n=0;
+  do{x=60+rnd(AW-120);y=60+rnd(AH-120)}while(inWall(x,y,26)&&++n<40);
+  const it={id:++iid,t:hasK(IT,ty)?ty:ks[rnd(ks.length)],x,y,life:20};items.push(it);
+  room.emit("isp",{id:it.id,t:it.t,x,y}).catch(()=>{});
+}
+function useItem(it){
+  const d=IT[it.t];sfx("snd_pickup");hudfx("pickup",.35);
+  if(it.t==="spd")me.spd=6;else if(it.t==="shd")me.inv=Math.max(me.inv,4);
+  else if(it.t==="hp")me.hp=Math.min(100,me.hp+40);else if(it.t==="pow")me.dbo=8;else if(it.t==="orb"){orbUp();return}
+  flash(d.n+" 획득");push({});
+}
+// ===== 개발자 모드 (H 키 + 비밀번호) =====
+const DEVH="2ea9a67d08273dc96e92a26e2afe4788d3985dcc3e1483d955c08929589d610b";
+let DEV=false,GOD=false,INF=false,dvFail=0,dvLock=0;
+const sha=async t=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)))).map(x=>x.toString(16).padStart(2,"0")).join("");
+function devOpen(){$("dvp").value="";$("dvm").textContent="";$("dv").classList.remove("hide");$("dvp").focus()}
+async function devTry(){
+  if(Date.now()<dvLock){$("dvm").textContent="잠시 후 다시 시도해 주세요.";return}
+  if(!(window.crypto&&crypto.subtle)){$("dvm").textContent="이 환경에서는 사용할 수 없어요.";return}
+  if(await sha($("dvp").value)===DEVH){dvFail=0;$("dv").classList.add("hide");setDev(true)}
+  else{if(++dvFail>=5){dvLock=Date.now()+30000;dvFail=0;$("dvm").textContent="5번 틀렸어요. 30초 뒤에 다시 시도하세요."}else $("dvm").textContent="비밀번호가 틀렸어요.";$("dvp").value=""}
+}
+function setDev(on){
+  DEV=on;if(!on){GOD=INF=false;me.inv=0}
+  $("dev").classList.toggle("hide",!on);if(on)buildDev();
+  $("admb").classList.toggle("hide",!(isHost&&on&&room));if(!on)$("adm").classList.add("hide");
+  flash(on?"개발자 모드 ON":"개발자 모드 OFF");
+}
+function buildDev(){
+  const A=$("dev");A.innerHTML="";
+  const mk=(txt,fn)=>{const b=document.createElement("button");b.className="btn alt";b.style.cssText="padding:6px 8px;font-size:13px;margin:2px";b.textContent=txt;b.onclick=()=>{fn();b.blur()};A.appendChild(b)};
+  const h=document.createElement("div");h.className="mut small";h.style.marginBottom="4px";h.textContent="개발자 모드 · H 키로 끄기 · 게임 중에 사용";A.appendChild(h);
+  mk((GOD?"[켜짐]":"[꺼짐]")+" 무적",()=>{GOD=!GOD;if(!GOD)me.inv=0;buildDev()});
+  mk((INF?"[켜짐]":"[꺼짐]")+" 무한 능력/궁극기",()=>{INF=!INF;buildDev()});
+  mk("HP 100",()=>{me.hp=100;push({})});
+  mk("궁극기 충전",()=>{me.ug=100});
+  Object.keys(IT).forEach(k=>mk(IT[k].n,()=>{if(phase==="fight")useItem({t:k})}));
+  [["sup1",""],["sup2",""],["sup3",""]].forEach(([k,e])=>mk(e+" 슈퍼무기",()=>{me.w=k;push({})}));
+  Object.keys(CH).forEach(k=>mk(CH[k].n,()=>{me.ch=k;push({})}));
+}
+$("dvok").onclick=devTry;
+$("dvno").onclick=()=>$("dv").classList.add("hide");
+$("dvp").onkeydown=e=>{if(e.key==="Enter")devTry();else if(e.key==="Escape")$("dv").classList.add("hide")};
+// ===== 능력 / 무기 레벨 / 명령어 =====
+let pop={t:"",life:0};
+const popup=t=>{pop.t=t;pop.life=3};
+const wname=(k,l)=>{const w=W[k]||W.dagger,a=WN[k];return (a?a[cl(l|0,1,3)-1]:w.n)+(l>1?" Lv."+l:"")};
+function orbUp(){
+  if(me.wl>=3){me.hp=Math.min(100,me.hp+25);popup(""+wname(me.w,3)+" 이미 최대 레벨! HP +25");push({});return}
+  const a=wname(me.w,me.wl);me.wl++;popup(""+a+" → "+wname(me.w,me.wl)+" 업그레이드!");flash("무기 구슬! Lv."+me.wl);push({});
+}
+function shoot(w,a){
+  if(!room||!myId||phase!=="fight"||!me.al)return;
+  const s={x:Math.round(me.x),y:Math.round(me.y),a:+a.toFixed(3),w,ch:me.ch,bo:me.dbo>0?1:0,l:1};
+  addProj(myId,s);room.emit("shot",s).catch(()=>{});
+}
+const fan=(w,n,c,sp,dl)=>{for(let i=0;i<n;i++){const a=n===1?c:c-sp/2+i*sp/(sp>=6.28?n:n-1);dl?setTimeout(()=>shoot(w,a),dl*i):shoot(w,a)}};
+const mv=(d)=>{me.x=cl(me.x+Math.cos(me.a)*d,PR,AW-PR);me.y=cl(me.y+Math.sin(me.a)*d,PR,AH-PR);wallPush()};
+const SKF={
+  fire:()=>fan("flame",8,0,6.283),
+  wind:()=>{mv(160);me.inv=Math.max(me.inv,.4)},
+  forest:()=>{me.hp=Math.min(100,me.hp+40)},
+  water:()=>{me.inv=Math.max(me.inv,2.5)},
+  thunder:()=>fan("bolt",3,me.a,.25,70),
+  ice:()=>fan("shard",7,me.a,.9),
+  poison:()=>fan("toxin",6,me.a,.7),
+  shadow:()=>{mv(280);me.inv=Math.max(me.inv,.5)},
+  earth:()=>fan("rock",10,0,6.283),
+  light:()=>fan("beam",6,me.a,0,60)
+};
+const ULF={
+  fire:()=>fan("flame",24,0,6.283),
+  wind:()=>{me.tf=5;me.inv=Math.max(me.inv,1.5)},
+  forest:()=>{me.hp=100;me.fv=6},
+  water:()=>{fan("wave",9,me.a,1.4);me.hp=Math.min(100,me.hp+20)},
+  thunder:()=>{for(let k=0;k<3;k++)setTimeout(()=>fan("bolt",12,k*.26,6.283),k*400)},
+  ice:()=>fan("icebl",12,0,6.283),
+  poison:()=>fan("toxin",20,0,6.283),
+  shadow:()=>{me.hid=5;me.dbo=Math.max(me.dbo,5);me.spd=Math.max(me.spd,5)},
+  earth:()=>fan("bigrock",1,me.a,0),
+  light:()=>{me.hp=100;me.inv=Math.max(me.inv,3);fan("beam",12,0,6.283)}
+};
+function skill(){
+  if(!me.al||me.sk>0||me.frz>0||!myId||phase!=="fight")return;
+  const c=me.ch;me.sk=chOf(c).sc||SKCD;(SKF[c]||SKF.fire)();
+  sfx("snd_skill");hudfx(c==="forest"||c==="light"?"heal":c==="water"?"shield":c==="wind"||c==="shadow"?"dash":"skill",.5);
+  flash(chOf(c).n+" 능력 발동!");push({});
+}
+function ult(){
+  if(!me.al||me.ug<100||me.frz>0||!myId||phase!=="fight")return;
+  me.ug=0;(ULF[me.ch]||ULF.fire)();sfx("snd_ult");hudfx("explosion",.7);flash("궁극기! "+UL[me.ch]);push({});
+}
+function roll(){
+  if(!me.al||me.dh>0||me.frz>0||phase!=="fight")return;
+  const fw=(keys.KeyW?1:0)-(keys.KeyS?1:0),sd=(keys.KeyD?1:0)-(keys.KeyA?1:0),dx=Math.cos(me.a)*fw-Math.sin(me.a)*sd,dy=Math.sin(me.a)*fw+Math.cos(me.a)*sd,a=(fw||sd)?Math.atan2(dy,dx):me.a;
+  me.x=cl(me.x+Math.cos(a)*130,PR,AW-PR);me.y=cl(me.y+Math.sin(a)*130,PR,AH-PR);
+  me.inv=Math.max(me.inv,.25);me.dh=4;wallPush();sfx("snd_dash");hudfx("dash",.3);push({});
+}
+// --- 명령어 콘솔: / 키로 열기. 등급 0=누구나, 1=개발자 모드, 2=개발자 모드+방장
+const CMDS={};
+const def=(n,l,d,f)=>{CMDS[n]={l,d,f}};
+const nA=(a,i,dv)=>{const v=parseFloat(a[i]);return isFinite(v)?v:dv};
+const peersV=()=>room?room.peers().filter(p=>p.kind==="viewer"):[];
+const findP=q=>{q=(q||"").toLowerCase();return q==="all"?peersV():peersV().filter(p=>String(p.presence.n||"").toLowerCase().includes(q))};
+const sendTo=(p,o)=>p.isMe?applyAdm(o):room.emit("adm",Object.assign({to:p.peer},o));
+const toAll=(a,o,ok)=>{const ps=findP(a[0]);if(!a[0]||!ps.length)return"플레이어를 찾을 수 없어요.";ps.forEach(p=>sendTo(p,o));return ok+" ("+ps.length+"명)"};
+def("help",0,"/help [명령어] 목록·설명",a=>{
+  if(a[0]&&CMDS[a[0]])return"/"+a[0]+" — "+CMDS[a[0]].d;
+  return["[누구나]","[개발자 모드]","[개발자 모드 + 방장]"].map((t,l)=>t+" "+Object.keys(CMDS).filter(k=>CMDS[k].l===l).map(k=>"/"+k).join(" ")).join("\n")});
+def("list",0,"접속자 목록",()=>peersV().map(p=>(p.presence.host?"[방장]":"")+String(p.presence.n||"?")).join(", "));
+def("god",1,"무적 켜기/끄기",()=>{GOD=!GOD;if(!GOD)me.inv=0;buildDev();return"무적 "+(GOD?"ON":"OFF")});
+def("inf",1,"무한 능력·궁극기 켜기/끄기",()=>{INF=!INF;buildDev();return"무한 능력 "+(INF?"ON":"OFF")});
+def("heal",1,"/heal [양] 체력 회복",a=>{me.hp=Math.min(100,me.hp+nA(a,0,100));push({});return"HP "+Math.round(me.hp)});
+def("hp",1,"/hp <1~100> 체력 설정",a=>{me.hp=cl(nA(a,0,100),1,100);push({});return"HP "+me.hp});
+def("ult",1,"궁극기 게이지 충전",()=>{me.ug=100;return"궁극기 충전!"});
+def("cd",1,"모든 쿨타임 초기화",()=>{me.sk=me.cd=me.dh=0;return"쿨타임 초기화"});
+def("speed",1,"/speed [초] 속도 증가",a=>{me.spd=nA(a,0,10);return"속도 증가 "+me.spd+"초"});
+def("shield",1,"/shield [초] 방어막",a=>{me.inv=Math.max(me.inv,nA(a,0,10));push({});return"방어막"});
+def("power",1,"/power [초] 공격력 1.8배",a=>{me.dbo=nA(a,0,10);return"파워 업"});
+def("hide",1,"/hide [초] 투명",a=>{me.hid=nA(a,0,10);push({});return"투명"});
+def("weapon",1,"/weapon <"+WK.join("|")+">",a=>{if(!WK.includes(a[0]))return"무기: "+WK.join(", ");me.w=a[0];me.wl=1;push({});return wname(me.w,1)});
+def("level",1,"/level <1~3> 무기 레벨",a=>{me.wl=cl(Math.round(nA(a,0,1)),1,3);popup(""+wname(me.w,me.wl));push({});return"무기 Lv."+me.wl});
+def("orb",1,"무기 구슬 효과(무기 업그레이드)",()=>{orbUp();return"구슬 사용"});
+def("char",1,"/char <"+Object.keys(CH).join("|")+">",a=>{if(!hasK(CH,a[0]))return"캐릭터: "+Object.keys(CH).join(", ");me.ch=a[0];push({});return CH[a[0]].n});
+def("tp",1,"/tp <x> <y> 순간이동",a=>{me.x=cl(nA(a,0,me.x),PR,AW-PR);me.y=cl(nA(a,1,me.y),PR,AH-PR);wallPush();push({});return"이동"});
+def("item",1,"/item <"+Object.keys(IT).join("|")+"> 즉시 획득",a=>{if(!hasK(IT,a[0]))return"아이템: "+Object.keys(IT).join(", ");useItem({t:a[0]});return"획득"});
+def("kill",1,"자폭",()=>{me.hp=0;if(me.al)die(null);return""});
+def("clear",1,"화면의 투사체 지우기",()=>{projs=[];return"clear"});
+def("kick",2,"/kick <닉네임|all> 내보내기",a=>{const ps=findP(a[0]).filter(p=>!p.isMe);if(!a[0]||!ps.length)return"대상을 찾을 수 없어요.";ps.forEach(p=>modKick(p.peer,"kick"));return ps.length+"명 내보냄"});
+def("ban",2,"/ban <닉네임> 영구 차단",a=>{
+  if(a[0]==="all")return"ban all은 지원하지 않아요.";
+  const ps=findP(a[0]).filter(p=>!p.isMe);if(!a[0]||!ps.length)return"대상을 찾을 수 없어요.";
+  const b=banGet();ps.forEach(p=>{const u=p.presence.u;if(u&&!b.some(x=>x.u===u))b.push({u,n:String(p.presence.n||"?")});modKick(p.peer,"ban")});
+  banSet(b);asig="";return ps.length+"명 영구 차단"});
+def("unban",2,"/unban <닉네임> 차단 해제",a=>{const q=(a[0]||"").toLowerCase(),b=banGet(),r=b.filter(x=>String(x.n).toLowerCase().includes(q));if(!q||!r.length)return"차단 목록에 없어요.";banSet(b.filter(x=>!r.includes(x)));asig="";return r.length+"명 해제"});
+def("bans",2,"차단 목록 보기",()=>{const b=banGet();return b.length?"차단: "+b.map(x=>x.n).join(", "):"차단 목록이 비었어요."});
+def("give",2,"/give <닉네임|all> <무기> 무기 지급",a=>WK.includes(a[1])?toAll(a,{cmd:"w",w:a[1]},"무기 지급"):"무기: "+WK.join(", "));
+def("sheal",2,"/sheal <닉네임|all> 체력 회복",a=>toAll(a,{cmd:"h"},"회복"));
+def("say",2,"/say <내용> 전체 공지",(a,raw)=>{if(!raw)return"/say <내용>";room.emit("adm",{to:"*",cmd:"msg",t:raw.slice(0,80)});return"공지 전송"});
+def("freeze",2,"/freeze <닉네임|all> [초] 얼리기",a=>toAll(a,{cmd:"frz",s:nA(a,1,3)},"얼림"));
+def("dmg",2,"/dmg <닉네임|all> <양> 피해 주기",a=>toAll(a,{cmd:"dmg",n:nA(a,1,10)},"피해"));
+def("slay",2,"/slay <닉네임|all> 처치",a=>toAll(a,{cmd:"dmg",n:999},"처치"));
+def("map",2,"/map <"+Object.keys(MAPS).join("|")+"> (대기실)",a=>{if(!hasK(MAPS,a[0]))return"맵: "+Object.keys(MAPS).join(", ");if(phase!=="lobby")return"대기실에서만 바꿀 수 있어요.";room.presence({map:a[0]});buildMaps();return MAPS[a[0]].n});
+def("start",2,"게임 시작",()=>{if(phase!=="lobby")return"이미 진행 중이에요.";setPhase("quiz");return"시작!"});
+def("end",2,"게임 강제 종료",()=>{setPhase("end");return"종료"});
+def("lobby",2,"대기실로 돌아가기",()=>{setPhase("lobby");return"대기실로"});
+def("spawn",2,"/spawn <아이템> [개수] 아이템 소환",a=>{if(phase!=="fight")return"전투 중에만 쓸 수 있어요.";const n=cl(Math.round(nA(a,1,1)),1,5);for(let i=0;i<n;i++)spawnItem(a[0]);return n+"개 소환"});
+def("bots",2,"/bots <0~6> CPU 수 (대기실)",a=>{if(phase!=="lobby")return"대기실에서만 바꿀 수 있어요.";const n=cl(Math.round(nA(a,0,3)),0,6);room.presence({bn:n});return"CPU "+n+"명"});
+def("botdiff",2,"/botdiff <0쉬움|1보통|2어려움>",a=>{const d=cl(Math.round(nA(a,0,1)),0,2);room.presence({bd:d});return"CPU 난이도 "+BD[d].n});
+def("rain",2,"아이템 5개 소환",()=>{if(phase!=="fight")return"전투 중에만 쓸 수 있어요.";for(let i=0;i<5;i++)spawnItem();return"아이템 비!"});
+function runCmd(line){
+  const raw=line.trim().replace(/^\//,""),a=raw.split(/\s+/),n=(a.shift()||"").toLowerCase(),c=hasK(CMDS,n)?CMDS[n]:null;
+  if(!c)return"알 수 없는 명령어예요. /help";
+  if(c.l>=1&&!DEV)return"개발자 모드(H 키 + 비밀번호)가 필요해요.";
+  if(c.l===2&&!isHost)return"방장만 쓸 수 있어요.";
+  if(!room&&n!=="help")return"방 안에서만 쓸 수 있어요.";
+  try{return String(c.f(a,raw.slice(n.length).trim())||"")}catch(e){return"오류: "+e.message}
+}
+const cmdHist=[];let hi=0;
+function cmdLog(t){const o=$("cmdo"),d=document.createElement("div");d.textContent=t;o.appendChild(d);while(o.children.length>40)o.removeChild(o.firstChild);o.scrollTop=1e9}
+function openCmd(){if(document.exitPointerLock)document.exitPointerLock();$("cmdw").classList.remove("hide");$("cmd").value="/";$("cmd").focus();if(!$("cmdo").children.length)cmdLog("/help 로 명령어 보기 · 닫기: Esc 또는 빈 줄에서 Enter")}
+function closeCmd(){$("cmdw").classList.add("hide");$("cmd").blur()}
+$("cmd").onkeydown=e=>{
+  if(e.key==="Escape")return closeCmd();
+  if(e.key==="ArrowUp"&&cmdHist.length){hi=Math.max(0,hi-1);$("cmd").value=cmdHist[hi];e.preventDefault();return}
+  if(e.key==="Enter"){
+    const v=$("cmd").value.trim();if(!v||v==="/")return closeCmd();
+    cmdHist.push(v);hi=cmdHist.length;cmdLog("> "+v);const r=runCmd(v);if(r){cmdLog(r);flash(r.split("\n")[0])}$("cmd").value="/";
+  }
+};
+function die(killer){
+  me.al=0;me.d++;me.resp=2;me.rq=0;hideMq();
+  if(!killer)me.lw="";room.emit("kill",{to:killer,w:me.lw||""}).catch(()=>{});push({});
+}
+function update(dt,t){
+  if(!myId){const m=myPeer();if(m)myId=m.peer}
+  if(me.al){
+    const fw=(keys.KeyW?1:0)-(keys.KeyS?1:0),sd=(keys.KeyD?1:0)-(keys.KeyA?1:0),dx=Math.cos(me.a)*fw-Math.sin(me.a)*sd,dy=Math.sin(me.a)*fw+Math.cos(me.a)*sd;
+    if((dx||dy)&&me.frz<=0){const l=Math.hypot(dx,dy),sp=chOf(me.ch).sp*(me.spd>0?1.5:1)*(me.tf>0?1.6:1)*(me.slow>0?.5:1);me.x=cl(me.x+dx/l*sp*dt,PR,AW-PR);me.y=cl(me.y+dy/l*sp*dt,PR,AH-PR)}
+    wallPush();if(keys.ArrowLeft)me.a-=2.2*dt;if(keys.ArrowRight)me.a+=2.2*dt;if(keys.ArrowUp)pitch=Math.min(1.2,pitch+1.5*dt);if(keys.ArrowDown)pitch=Math.max(-1.2,pitch-1.5*dt);me.cd-=dt;me.inv-=dt;me.sk-=dt;me.spd-=dt;me.tf-=dt;me.fv-=dt;me.dbo-=dt;me.ug=Math.min(100,me.ug+3*dt);
+    me.slow-=dt;me.frz-=dt;me.psn-=dt;me.hid-=dt;me.dh-=dt;
+    if(me.psn>0){me.hp-=5*dt;if(me.hp<=0)die(null)}
+    if(me.ch==="light")me.hp=Math.min(100,me.hp+2*dt);
+    if(DEV){if(GOD)me.inv=Math.max(me.inv,1);if(INF){me.sk=0;me.ug=100}}
+    if((mouse.down||keys.Space)&&me.cd<=0&&me.frz<=0)fire();
+  }else{me.resp-=dt;if(me.resp<=0&&!me.rq)startRespQuiz()}
+  if(me.al&&me.inv<=0&&MAP.hz.some(([x,y,w,h])=>me.x>x&&me.x<x+w&&me.y>y&&me.y<y+h)){me.hp-=12*dt;if(me.hp<=0)die(null)}
+  if(isHost&&t>nextItem&&items.length<8){spawnItem();nextItem=t+4000+rnd(3000)}
+  for(const it of items)it.life-=dt;
+  items=items.filter(i=>i.life>0);
+  if(me.al)for(const it of items.slice())if(Math.hypot(it.x-me.x,it.y-me.y)<PR+16){useItem(it);items=items.filter(i=>i!==it);room.emit("itk",{id:it.id}).catch(()=>{})}
+  for(const p of projs){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;if(MAP.w.some(([x,y,w,h])=>p.x>x&&p.x<x+w&&p.y>y&&p.y<y+h))p.life=0;
+    if(me.al&&me.inv<=0&&myId&&p.o!==myId&&p.life>0&&Math.hypot(p.x-me.x,p.y-me.y)<PR+p.r){
+      p.life=0;me.hp-=p.dmg*chOf(me.ch).tk*(me.fv>0?.4:1);me.ug=Math.min(100,me.ug+8);sfx("snd_hit",.6);hudfx("hit",.3);const kw=W[p.k];if(kw){if(kw.sl)me.slow=2;if(kw.fz)me.frz=kw.fz;if(kw.ps)me.psn=3}me.lw=p.k;if(me.hp<=0)die(p.o);
+    }}
+  projs=projs.filter(p=>p.life>0&&p.x>-50&&p.x<AW+50&&p.y>-50&&p.y<AH+50);
+  if(isHost&&bots.length)botUpdate(dt);
+  pop.life-=dt;
+  if(t-pAt>50){pAt=t;push({});if(isHost&&bots.length){refreshBotPres();if(room.bc)room.bc()}}
+  if(t>nextMq&&me.al&&$("mq").classList.contains("hide"))showMq();
+  $("h1").textContent=""+Math.max(0,Math.round(me.hp))+"  ·  "+me.k+"킬";
+  $("h2").textContent=""+Math.max(0,Math.ceil(FIGHT-(t-t0)/1000))+"초";
+  $("h3").textContent=wname(me.w,me.wl)+" · "+chOf(me.ch).n+(me.sk>0?" (E "+Math.ceil(me.sk)+"초)":" (E 준비!)")+(me.dh>0?" "+Math.ceil(me.dh):" ")+(DEV?" ":"");
+}
+// ===== 3D 렌더링 (Three.js, 1인칭) =====
+let T3=null,T3fail=false,pitch=0,kick=0,lastHp=100,dmgT=0;
+const HW=900,HH=560;
+function resize3D(){
+  if(!T3)return;const b=$("gl").parentElement.getBoundingClientRect();if(!b.width)return;
+  T3.r.setSize(b.width,b.height,false);T3.cam.aspect=b.width/b.height;T3.cam.updateProjectionMatrix();
+}
+function ensure3D(){
+  if(T3||S3)return;
+  if(window.THREE&&!/[?&]soft/.test(location.search))try{
+    const r=new THREE.WebGLRenderer({canvas:$("gl"),antialias:true}),scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(75,1.6,1,3000);
+    r.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));cam.rotation.order="YXZ";scene.add(cam);
+    scene.add(new THREE.AmbientLight(0xffffff,.8));const dl=new THREE.DirectionalLight(0xffffff,.6);dl.position.set(400,800,300);scene.add(dl);
+    const world=new THREE.Group();scene.add(world);
+    T3={r,scene,cam,world,st:null,ents:{},itm:{},pool:[],gm:new THREE.SphereGeometry(1,10,8),txt:{},vm:null,vk:""};
+    const vm=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true,depthTest:false}));
+    vm.scale.set(2.7,1.35,1);vm.position.set(1.9,-1.25,-3);vm.material.rotation=.1;vm.renderOrder=10;cam.add(vm);T3.vm=vm;
+    addEventListener("resize",resize3D);
+    $("gl").addEventListener("webglcontextlost",ev=>{ev.preventDefault();toSoft()});return;
+  }catch(e){T3=null}
+  initSoft();flash("호환 3D 모드로 실행해요");
+}
+function build3D(){
+  if(!T3)return;
+  if(T3.st)T3.world.remove(T3.st);
+  const st=new THREE.Group();T3.st=st;T3.world.add(st);
+  {const si=AS["sky_"+mapKey()];T3.scene.background=(si&&!si._t)?tex3("sk_"+mapKey(),si):new THREE.Color(MAP.sky)}T3.scene.fog=new THREE.Fog(MAP.sky,350,1500);
+  const c=document.createElement("canvas");c.width=c.height=128;const g=c.getContext("2d");
+  g.fillStyle=MAP.bg;g.fillRect(0,0,128,128);g.strokeStyle=MAP.gl;g.lineWidth=3;g.strokeRect(0,0,128,128);
+  const tx=new THREE.CanvasTexture(c);tx.wrapS=tx.wrapT=THREE.RepeatWrapping;tx.repeat.set(AW/100,AH/100);
+  const mk=mapKey(),gi=AS["ground_"+mk];let gmap=tx;if(gi&&!gi._t){gmap=tex3("gr_"+mk,gi);gmap.wrapS=gmap.wrapT=THREE.RepeatWrapping;gmap.repeat.set(AW/256,AH/256);gmap.needsUpdate=true}
+  const gr=new THREE.Mesh(new THREE.PlaneGeometry(AW,AH),new THREE.MeshLambertMaterial({map:gmap}));
+  gr.rotation.x=-Math.PI/2;gr.position.set(AW/2,0,AH/2);st.add(gr);
+  const wi=AS["wall_"+mk],wm=new THREE.MeshLambertMaterial(wi&&!wi._t?{map:tex3("wl_"+mk,wi)}:{color:MAP.wc}),H=MAP.wh||90;
+  const box=(x,y,w,h,hh)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,hh,h),wm);m.position.set(x+w/2,hh/2,y+h/2);st.add(m)};
+  for(const [x,y,w,h] of MAP.w){
+    box(x,y,w,h,H);
+    if(MAP.tree){const cn=new THREE.Mesh(new THREE.ConeGeometry(w*1.2,100,8),new THREE.MeshLambertMaterial({color:0x15803d}));cn.position.set(x+w/2,H+45,y+h/2);st.add(cn)}
+  }
+  box(-20,-20,AW+40,20,140);box(-20,AH,AW+40,20,140);box(-20,0,20,AH,140);box(AW,0,20,AH,140);
+  for(const [x,y,w,h] of MAP.hz){
+    const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:0xdc2626,transparent:true,opacity:.7}));
+    m.rotation.x=-Math.PI/2;m.position.set(x+w/2,1,y+h/2);st.add(m);
+  }
+}
+function mkEnt(){
+  const g=new THREE.Group(),mat=new THREE.MeshLambertMaterial({color:0xff0000,transparent:true});
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(13,15,34,12),mat);body.position.y=17;
+  const head=new THREE.Mesh(new THREE.SphereGeometry(9,12,10),new THREE.MeshLambertMaterial({color:0xffd7b0,transparent:true}));head.position.y=42;
+  const vis=new THREE.Mesh(new THREE.BoxGeometry(12,4,4),new THREE.MeshBasicMaterial({color:0x111111,transparent:true}));vis.position.set(0,43,-8);
+  const c=document.createElement("canvas");c.width=256;c.height=64;const tex=new THREE.CanvasTexture(c);
+  const lab=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true}));lab.scale.set(64,16,1);lab.position.y=68;
+  const ico=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true}));ico.scale.set(30,15,1);ico.position.set(10,30,-16);
+  const sh=new THREE.Mesh(new THREE.SphereGeometry(26,14,10),new THREE.MeshBasicMaterial({color:0x7dd3fc,transparent:true,opacity:.25}));sh.position.y=24;
+  const spr=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true}));spr.scale.set(52,52,1);spr.position.y=28;spr.visible=false;
+  g.add(body,head,vis,lab,ico,sh,spr);T3.world.add(g);
+  return {g,mat,head,vis,lab,tex,c,ico,sh,body,spr,key:"",wk:"",pk:""};
+}
+function sync3D(){
+  const seen={};
+  for(const p of room.peers()){
+    if(p.kind!=="viewer"||(p.isMe&&p.sameTab))continue;
+    const q=p.presence;if(!q||q.x==null)continue;
+    const e=T3.ents[p.peer]||(T3.ents[p.peer]=mkEnt());seen[p.peer]=1;
+    e.g.visible=!!q.al;e.g.position.set(+q.x,0,+q.y);e.g.rotation.y=-(+q.a||0)-Math.PI/2;
+    e.mat.color.set(col(q.c));const op=q.hd?.12:1;e.mat.opacity=op;e.head.material.opacity=op;e.vis.material.opacity=op;
+    e.lab.visible=!q.hd;e.ico.visible=!q.hd;e.sh.visible=!!q.sh;
+    {const pk=AS["player_"+q.ch],use=!!(pk&&!pk._t);e.spr.visible=use;e.body.visible=e.head.visible=e.vis.visible=!use;
+     if(use){if(e.pk!==q.ch){e.spr.material.map=tex3("pl_"+q.ch,pk);e.spr.material.needsUpdate=true;e.pk=q.ch}e.spr.material.opacity=q.hd?.12:1}}
+    const nm=String(q.n||"?").slice(0,10),hp=Math.max(0,Math.min(100,+q.hp||0)),key=nm+"|"+Math.round(hp/5);
+    if(e.key!==key){
+      e.key=key;const g=e.c.getContext("2d");g.clearRect(0,0,256,64);g.fillStyle="rgba(0,0,0,.55)";g.fillRect(0,0,256,64);
+      g.fillStyle="#fff";g.font="bold 26px sans-serif";g.textAlign="center";g.fillText(nm,128,28);
+      g.fillStyle="#333";g.fillRect(28,40,200,14);g.fillStyle=hp>50?"#22c55e":hp>25?"#f59e0b":"#ef4444";g.fillRect(28,40,2*hp,14);e.tex.needsUpdate=true;
+    }
+    const em=WK.includes(q.w)?q.w:"dagger";
+    if(e.wk!==em){e.ico.material.map=wTex(em,128,64);e.ico.material.needsUpdate=true;e.wk=em}
+  }
+  for(const k in T3.ents)if(!seen[k]){T3.world.remove(T3.ents[k].g);delete T3.ents[k]}
+  const live={};
+  for(const it of items){
+    live[it.id]=1;let m=T3.itm[it.id];
+    if(!m){m=new THREE.Sprite(new THREE.SpriteMaterial({map:iTex(it.t,128),transparent:true}));m.scale.set(34,34,1);T3.world.add(m);T3.itm[it.id]=m}
+    m.position.set(it.x,28+Math.sin(performance.now()/300+it.id)*6,it.y);
+  }
+  for(const k in T3.itm)if(!live[k]){T3.world.remove(T3.itm[k]);delete T3.itm[k]}
+  const P=T3.pool,PS=T3.ps||(T3.ps=[]);let ia=0,sa=0;
+  for(const p of projs){
+    const im=AS["proj_"+p.k];
+    if(im&&!im._t){
+      let sp=PS[sa];if(!sp){sp=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true,depthWrite:false}));T3.world.add(sp);PS.push(sp)}sa++;
+      const t=tex3("pr_"+p.k,im);if(sp.material.map!==t){sp.material.map=t;sp.material.needsUpdate=true}
+      sp.visible=true;sp.position.set(p.x,24,p.y);const z=Math.max(14,p.r*3.2);sp.scale.set(z,z,1);sp.material.opacity=p.sw?.7:1;
+    }else{
+      let m=P[ia];if(!m){m=new THREE.Mesh(T3.gm,new THREE.MeshBasicMaterial({transparent:true}));T3.world.add(m);P.push(m)}ia++;
+      m.visible=true;m.position.set(p.x,24,p.y);m.scale.setScalar(p.r);m.material.color.set(p.col);m.material.opacity=p.sw?.55:.95;
+    }
+  }
+  for(let i=ia;i<P.length;i++)P[i].visible=false;for(let i=sa;i<PS.length;i++)PS[i].visible=false;
+  fxRender();
+}
+// ===== 호환 3D: WebGL·Three.js 없이 Canvas만으로 그리는 3D (어떤 기기·네트워크에서도 동작) =====
+let S3=null;const SWW=720,SHH=448,rgbC={},sCache={};
+function initSoft(){
+  if(S3)return;
+  let c=$("gl");
+  if(!c||!c._soft){const n=document.createElement("canvas");n.id="gl";if(c&&c.parentNode)c.parentNode.replaceChild(n,c);else document.querySelector(".cv").prepend(n);c=n;c._soft=1}
+  c.width=SWW;c.height=SHH;S3={c,g:c.getContext("2d")};
+}
+function toSoft(){try{T3&&T3.r.dispose()}catch(e){}T3=null;T3fail=true;initSoft()}
+function rgbOf(v){
+  const k=String(v);if(rgbC[k])return rgbC[k];
+  const tg=S3.tg||(S3.tg=document.createElement("canvas").getContext("2d"));
+  tg.fillStyle="#000";tg.fillStyle=typeof v==="number"?"#"+v.toString(16).padStart(6,"0"):String(v);const s=tg.fillStyle;
+  if(s[0]==="#"){const n=parseInt(s.slice(1),16);return rgbC[k]=[n>>16,n>>8&255,n&255]}
+  const m=s.match(/[\d.]+/g)||[0,0,0];return rgbC[k]=[+m[0],+m[1],+m[2]];
+}
+const sCv=(key,w,h,fn)=>sCache[key]||(sCache[key]=cvs(w,h,fn));
+function renderSoft(){
+  const g=S3.g,W=SWW,H=SHH,a=me.a,rx=me.al?pitch:-.3,cx=me.x,cy=me.al?32:10,cz=me.y,
+    ca=Math.cos(a),sa=Math.sin(a),cr=Math.cos(rx),sr=Math.sin(rx),f=H/2/Math.tan(37.5*Math.PI/180),NR=1,
+    sky=rgbOf(MAP.sky),skyS="rgb("+sky.join()+")",HH=MAP.wh||90,hy=H/2+f*Math.tan(rx),now=performance.now();
+  const cam=(x,y,z)=>{const dx=x-cx,dy=y-cy,dz=z-cz;return[-dx*sa+dz*ca,-dx*sr*ca+dy*cr-dz*sr*sa,dx*ca*cr+dy*sr+dz*sa*cr]};
+  const sc=p=>[W/2+p[0]/p[2]*f,H/2-p[1]/p[2]*f];
+  const clip=P=>{const o=[];for(let i=0;i<P.length;i++){const A=P[i],B=P[(i+1)%P.length],ia=A[2]>=NR,ib=B[2]>=NR;if(ia)o.push(A);if(ia!==ib){const t=(NR-A[2])/(B[2]-A[2]);o.push([A[0]+(B[0]-A[0])*t,A[1]+(B[1]-A[1])*t,NR])}}return o};
+  const q8=v=>Math.min(255,v|0);
+  const fog=(c,sh,d)=>{const k=Math.max(0,Math.min(1,(d-350)/1150)),m=1-k;return"rgb("+q8(c[0]*sh*m+sky[0]*k)+","+q8(c[1]*sh*m+sky[1]*k)+","+q8(c[2]*sh*m+sky[2]*k)+")"};
+  const fk=d=>Math.max(0,Math.min(1,(d-350)/1150));
+  const poly=(V,st,al)=>{const P=clip(V.map(v=>cam(v[0],v[1],v[2])));if(P.length<3)return;g.globalAlpha=al==null?1:al;g.fillStyle=st;g.beginPath();P.forEach((p,i)=>{const s=sc(p);i?g.lineTo(s[0],s[1]):g.moveTo(s[0],s[1])});g.closePath();g.fill();if(al==null){g.strokeStyle=st;g.lineWidth=1;g.stroke()}};
+  const seg=(A,B)=>{let p=cam(A[0],A[1],A[2]),r=cam(B[0],B[1],B[2]);if(p[2]<NR&&r[2]<NR)return;if(p[2]<NR){const t=(NR-p[2])/(r[2]-p[2]);p=[p[0]+(r[0]-p[0])*t,p[1]+(r[1]-p[1])*t,NR]}else if(r[2]<NR){const t=(NR-r[2])/(p[2]-r[2]);r=[r[0]+(p[0]-r[0])*t,r[1]+(p[1]-r[1])*t,NR]}const s=sc(p),e=sc(r);g.moveTo(s[0],s[1]);g.lineTo(e[0],e[1])};
+  const spr=(im,x,y,z,w,h,al)=>{const p=cam(x,y,z);if(p[2]<NR)return;const s=f/p[2],o=sc(p);g.globalAlpha=(al==null?1:al)*(1-.5*fk(Math.hypot(x-cx,z-cz)));g.drawImage(im,o[0]-w*s/2,o[1]-h*s/2,w*s,h*s)};
+  // 하늘·바닥
+  g.globalAlpha=1;g.fillStyle=skyS;g.fillRect(0,0,W,H);
+  const si=AS["sky_"+mapKey()];if(si&&si.width){const ww=W*2,px=(((-a/(2*Math.PI))*ww)%ww+ww)%ww,hh=Math.max(40,Math.min(H,hy));g.drawImage(si,px-ww,0,ww,hh);g.drawImage(si,px,0,ww,hh)}
+  poly([[0,0,0],[AW,0,0],[AW,0,AH],[0,0,AH]],"rgb("+rgbOf(MAP.bg).join()+")");
+  g.globalAlpha=.55;g.strokeStyle="rgb("+rgbOf(MAP.gl).join()+")";g.lineWidth=1.5;g.beginPath();
+  for(let i=0;i<=AW;i+=100)seg([i,0,0],[i,0,AH]);for(let j=0;j<=AH;j+=100)seg([0,0,j],[AW,0,j]);g.stroke();
+  for(const [x,y,w,h] of MAP.hz)poly([[x,1,y],[x+w,1,y],[x+w,1,y+h],[x,1,y+h]],"#dc2626",.7);
+  const gr=g.createLinearGradient(0,hy,0,hy+36);gr.addColorStop(0,skyS);gr.addColorStop(1,"rgba("+sky.join()+",0)");g.globalAlpha=1;g.fillStyle=gr;g.fillRect(0,hy,W,36);
+  // 거리순 정렬 목록 (먼 것부터 그림)
+  const L=[],D=(x,z)=>(x-cx)*(x-cx)+(z-cz)*(z-cz),wr=rgbOf(MAP.wc),N=n=>Math.max(1,Math.ceil(n/110));
+  const face=(V,sh)=>{let x=0,z=0;for(const v of V){x+=v[0];z+=v[2]}x/=V.length;z/=V.length;const d=D(x,z);L.push([d,()=>poly(V,fog(wr,sh,Math.sqrt(d)))])};
+  const box=(x,y,w,h,hh)=>{const x1=x+w,z1=y+h;let n,i;
+    for(const [nz,zz,sh] of [[-1,y,.75],[1,z1,.95]])if((cz-zz)*nz>0){n=N(w);for(i=0;i<n;i++){const A=x+w*i/n,B=x+w*(i+1)/n;face([[A,0,zz],[B,0,zz],[B,hh,zz],[A,hh,zz]],sh)}}
+    for(const [nx,xx,sh] of [[-1,x,.75],[1,x1,1]])if((cx-xx)*nx>0){n=N(h);for(i=0;i<n;i++){const A=y+h*i/n,B=y+h*(i+1)/n;face([[xx,0,A],[xx,0,B],[xx,hh,B],[xx,hh,A]],sh)}}
+    if(cy>hh){n=N(w);for(i=0;i<n;i++){const A=x+w*i/n,B=x+w*(i+1)/n;face([[A,hh,y],[B,hh,y],[B,hh,z1],[A,hh,z1]],1.15)}}};
+  for(const [x,y,w,h] of MAP.w){
+    box(x,y,w,h,HH);
+    if(MAP.tree){const tx=x+w/2,tz=y+h/2,R=w*1.2;L.push([D(tx,tz),()=>{const b=cam(tx,HH-5,tz),t=cam(tx,HH+95,tz);if(b[2]<NR||t[2]<NR)return;const sb=sc(b),st=sc(t),s=f/b[2];g.globalAlpha=1;g.fillStyle=fog([21,128,61],1,Math.sqrt(D(tx,tz)));g.beginPath();g.moveTo(sb[0]-R*s,sb[1]);g.lineTo(sb[0]+R*s,sb[1]);g.lineTo(st[0],st[1]);g.closePath();g.fill()}])}
+  }
+  box(-20,-20,AW+40,20,140);box(-20,AH,AW+40,20,140);box(-20,0,20,AH,140);box(AW,0,20,AH,140);
+  // 아이템·투사체·이펙트
+  for(const it of items)L.push([D(it.x,it.y),()=>spr(sCv("i"+it.t,128,128,gg=>drawItem(gg,it.t,128)),it.x,28+Math.sin(now/300+it.id)*6,it.y,34,34)]);
+  for(const p of projs){const im=AS["proj_"+p.k];L.push([D(p.x,p.y),()=>{
+    if(im&&im.width){const z=Math.max(14,p.r*3.2);spr(im,p.x,24,p.y,z,z,p.sw?.7:1)}
+    else{const c=cam(p.x,24,p.y);if(c[2]<NR)return;const o=sc(c);g.globalAlpha=p.sw?.55:.95;g.fillStyle=p.col;g.beginPath();g.arc(o[0],o[1],Math.max(1.5,p.r*f/c[2]),0,6.3);g.fill()}}])}
+  fxs=fxs.filter(e=>now-e.t0<e.life*1000);
+  for(const e of fxs)L.push([D(e.x,e.z),()=>{const p=(now-e.t0)/(e.life*1000),cv2=sCv("fxbuf",128,128,()=>{}),fg=cv2.getContext("2d");fg.clearRect(0,0,128,128);drawFx(fg,e.key,p,0,0,128,128);const z=e.size*(.7+.7*p);g.globalCompositeOperation="lighter";spr(cv2,e.x,e.y,e.z,z,z,Math.max(0,1-p*p));g.globalCompositeOperation="source-over"}]);
+  // 다른 플레이어
+  const ent=(q,X,Z)=>{
+    const b=cam(X,0,Z);if(b[2]<NR)return;const s=f/b[2],o=sc(b),Y=y=>sc(cam(X,y,Z))[1],hd=q.hd,k=fk(Math.sqrt(D(X,Z))),pk=AS["player_"+q.ch];
+    g.globalAlpha=(hd?.12:1)*(1-.5*k);
+    if(pk&&pk.width)g.drawImage(pk,o[0]-26*s,Y(54),52*s,Y(2)-Y(54));
+    else{
+      g.fillStyle="rgb("+rgbOf(col(q.c)).join()+")";g.beginPath();g.moveTo(o[0]-15*s,o[1]);g.lineTo(o[0]+15*s,o[1]);g.lineTo(o[0]+13*s,Y(34));g.lineTo(o[0]-13*s,Y(34));g.closePath();g.fill();
+      g.fillStyle="#ffd7b0";g.beginPath();g.arc(o[0],Y(42),9*s,0,6.3);g.fill();
+      const fa=+q.a||0;if(Math.cos(fa)*(cx-X)+Math.sin(fa)*(cz-Z)>0){g.fillStyle="#111";g.fillRect(o[0]+Math.sin(fa-a)*7*s-6*s,Y(43)-2*s,12*s,4*s)}
+    }
+    if(q.sh){g.globalAlpha=.25;g.fillStyle="#7dd3fc";g.beginPath();g.arc(o[0],Y(24),26*s,0,6.3);g.fill()}
+    if(!hd){
+      g.globalAlpha=1-.5*k;const nm=String(q.n||"?").slice(0,10),hp=Math.max(0,Math.min(100,+q.hp||0)),em=WK.includes(q.w)?q.w:"dagger";
+      g.drawImage(sCv("L"+nm+"|"+Math.round(hp/5),256,64,l=>{l.fillStyle="rgba(0,0,0,.55)";l.fillRect(0,0,256,64);l.fillStyle="#fff";l.font="bold 26px sans-serif";l.textAlign="center";l.fillText(nm,128,28);l.fillStyle="#333";l.fillRect(28,40,200,14);l.fillStyle=hp>50?"#22c55e":hp>25?"#f59e0b":"#ef4444";l.fillRect(28,40,2*hp,14)}),o[0]-32*s,Y(68)-8*s,64*s,16*s);
+      g.drawImage(sCv("w"+em+"128",128,64,l=>drawWeapon(l,em,128,64)),o[0]-3*s,Y(30)-7*s,30*s,15*s);
+    }
+  };
+  for(const pe of room.peers()){if(pe.kind!=="viewer"||(pe.isMe&&pe.sameTab))continue;const q=pe.presence;if(!q||q.x==null||!q.al)continue;const X=+q.x,Z=+q.y;L.push([D(X,Z),()=>ent(q,X,Z)])}
+  L.sort((p,q)=>q[0]-p[0]);for(const o of L)o[1]();
+  // 내 손에 든 무기
+  g.globalAlpha=1;kick=Math.max(0,kick-.08);
+  if(me.al){const em=WK.includes(me.w)?me.w:"dagger",z=3-kick*.5,wx=W/2+1.9/z*f,wy=H/2-(-1.25+kick*.15)/z*f;
+    g.save();g.translate(wx,wy);g.rotate(-.1);g.drawImage(sCv("w"+em+"512",512,256,l=>drawWeapon(l,em,512,256)),-1.35/z*f,-.675/z*f,2.7/z*f,1.35/z*f);g.restore()}
+}
+function render3D(){
+  if(!T3){if(S3)try{renderSoft()}catch(e){console.error(e)}return}
+  const cam=T3.cam;
+  cam.position.set(me.x,me.al?32:10,me.y);cam.rotation.y=-me.a-Math.PI/2;cam.rotation.x=me.al?pitch:-.3;
+  const em=WK.includes(me.w)?me.w:"dagger";
+  if(T3.vk!==em){T3.vm.material.map=wTex(em,512,256);T3.vm.material.needsUpdate=true;T3.vk=em}
+  kick=Math.max(0,kick-.08);T3.vm.visible=!!me.al;T3.vm.position.z=-3+kick*.5;T3.vm.position.y=-1.25+kick*.15;
+  try{sync3D();T3.r.render(T3.scene,cam)}catch(e){console.error(e);toSoft()}
+}
+// ===== 벡터 아이콘 (이모지 대신 직접 그린 그림) =====
+// ===== 외부 에셋 (사진·이펙트·소리) =====
+// assets/ 폴더에 파일을 넣으면 자동으로 적용되고, 없으면 기본 그림/소리 없음으로 동작해요.
+// 이미지: png/webp/jpg · 소리: mp3/ogg/wav · 파일 이름 목록은 에셋_가이드.md 참고
+const AD="assets/",AS={},SND={};
+// 이펙트 이미지가 가로 스프라이트 시트면 여기에 프레임 수를 적으세요 (예: fx_hit.png가 8칸이면 hit:8)
+const FXF={muzzle:1,hit:1,explosion:1,death:1,pickup:1,heal:1,shield:1,dash:1,skill:1};
+const FXC={muzzle:"255,210,90",hit:"255,90,70",explosion:"255,150,40",death:"255,255,255",pickup:"255,255,255",heal:"60,220,140",shield:"90,170,255",dash:"255,255,255",skill:"255,170,60"};
+const FIREARM=["gun","sup1","sup2","sup3","magic"];
+const IMG_NAMES=[...WK.map(k=>"weapon_"+k),...Object.keys(IT).map(k=>"item_"+k),...Object.keys(CH).map(k=>"char_"+k),...Object.keys(CH).map(k=>"player_"+k),...Object.keys(W).map(k=>"proj_"+k),...Object.keys(FXF).map(k=>"fx_"+k),...Object.keys(MAPS).flatMap(k=>["ground_"+k,"wall_"+k,"sky_"+k]),"logo","bg_home","crosshair"];
+const SND_NAMES=["snd_shot",...WK.map(k=>"snd_shot_"+k),"snd_hit","snd_kill","snd_pickup","snd_skill","snd_ult","snd_dash","snd_ok","snd_bad","snd_click","bgm_menu","bgm_battle"];
+let g3d=false,MUTE=false,muz=0,hfx=[],fxs=[],bgmA=null,bgmWant="bgm_menu";
+const asImg=n=>{const im=AS[n];return im&&!(g3d&&im._t)?im:null};
+function imgFit(g,im,x,y,w,h){const r=Math.min(w/im.width,h/im.height),dw=im.width*r,dh=im.height*r;g.drawImage(im,x+(w-dw)/2,y+(h-dh)/2,dw,dh)}
+function tryImg(name){
+  return new Promise(res=>{
+    let i=0;const ex=["png","webp","jpg"];
+    const next=()=>{
+      if(i>=ex.length)return res(null);
+      const im=new Image();
+      im.onload=()=>{try{const c=document.createElement("canvas");c.width=c.height=1;const g=c.getContext("2d");g.drawImage(im,0,0,1,1);g.getImageData(0,0,1,1)}catch(e){im._t=1}res(im)};
+      im.onerror=()=>{i++;next()};im.src=AD+name+"."+ex[i];
+    };next();
+  });
+}
+function trySnd(name){
+  return new Promise(res=>{
+    let i=0,done=false;const ex=["mp3","ogg","wav"];
+    const fin=v=>{if(!done){done=true;res(v)}};setTimeout(()=>fin(null),4000);
+    const next=()=>{
+      if(i>=ex.length)return fin(null);
+      const a=new Audio();a.preload="auto";
+      a.addEventListener("canplay",()=>fin(a),{once:true});a.addEventListener("error",()=>{i++;next()},{once:true});
+      a.src=AD+name+"."+ex[i];a.load();
+    };next();
+  });
+}
+function loadAssets(){
+  return Promise.all([...IMG_NAMES.map(n=>tryImg(n).then(im=>{if(im)AS[n]=im})),...SND_NAMES.map(n=>trySnd(n).then(a=>{if(a)SND[n]=a}))]).then(assetsDone);
+}
+function assetsDone(){
+  if(AS.logo){$("logo").src=AS.logo.src;$("logo").classList.remove("hide")}
+  if(AS.bg_home){document.documentElement.style.setProperty("--bgimg","url("+AS.bg_home.src+")");document.body.classList.add("hasbg")}
+  if(T3){T3.txt={};T3.vk="";for(const k in T3.ents)T3.ents[k].wk="";for(const k in T3.itm){T3.world.remove(T3.itm[k]);delete T3.itm[k]}}
+  bgmPlay();
+}
+const sfx=(n,v)=>{if(MUTE)return;const a=SND[n];if(!a)return;try{const c=a.cloneNode();c.volume=Math.max(0,Math.min(1,v==null?.7:v));c.play().catch(()=>{})}catch(e){}};
+const sfxShot=(w,v)=>sfx(SND["snd_shot_"+w]?"snd_shot_"+w:"snd_shot",v);
+function bgmPlay(){const a=MUTE?null:(SND[bgmWant]||null);if(bgmA&&bgmA!==a)bgmA.pause();bgmA=a;if(a){a.loop=true;a.volume=.35;a.play().catch(()=>{})}}
+function bgmFor(p){bgmWant=p==="fight"?"bgm_battle":"bgm_menu";bgmPlay()}
+function toggleMute(){MUTE=!MUTE;bgmPlay();flash(MUTE?"소리 끔":"소리 켬")}
+addEventListener("pointerdown",function f(){bgmPlay();removeEventListener("pointerdown",f)});
+document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("button"))sfx("snd_click",.5)});
+const tex3=(key,img)=>T3.txt[key]||(T3.txt[key]=(t=>{t.needsUpdate=true;return t})(new THREE.Texture(img)));
+// 이펙트: 월드(3D) 이펙트와 화면(HUD) 이펙트
+function fxw(key,x,z,size,life,y){fxs.push({key,x,y:y==null?26:y,z,size:size||60,life:life||.5,t0:performance.now()});if(fxs.length>40)fxs.shift()}
+function hudfx(key,life){if(key==="hit"&&!AS.fx_hit)return;hfx.push({key,life:life||.4,t0:performance.now()});if(hfx.length>8)hfx.shift()}
+function drawFx(g,key,p,x,y,w,h){
+  const im=asImg("fx_"+key),fr=FXF[key]||1;
+  if(im){const fw=im.width/fr,i=Math.min(fr-1,Math.floor(p*fr));g.drawImage(im,i*fw,0,fw,im.height,x,y,w,h);return}
+  const rgb=FXC[key]||"255,255,255",cx=x+w/2,cy=y+h/2,r=Math.min(w,h)/2,q=g.createRadialGradient(cx,cy,r*.05,cx,cy,r);
+  q.addColorStop(0,"rgba("+rgb+",1)");q.addColorStop(.45,"rgba("+rgb+",.55)");q.addColorStop(1,"rgba("+rgb+",0)");g.fillStyle=q;g.fillRect(x,y,w,h);
+}
+function fxRender(){
+  const now=performance.now();fxs=fxs.filter(f=>now-f.t0<f.life*1000);
+  const FP=T3.fxp||(T3.fxp=[]);
+  while(FP.length<fxs.length){
+    const c=document.createElement("canvas");c.width=c.height=128;const t=new THREE.CanvasTexture(c);
+    const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));s.userData={c,t};T3.world.add(s);FP.push(s);
+  }
+  FP.forEach((s,i)=>{
+    const f=fxs[i];if(!f){s.visible=false;return}
+    const p=(now-f.t0)/(f.life*1000),g=s.userData.c.getContext("2d");g.clearRect(0,0,128,128);
+    g3d=true;try{drawFx(g,f.key,p,0,0,128,128)}finally{g3d=false}
+    s.userData.t.needsUpdate=true;s.visible=true;s.position.set(f.x,f.y,f.z);const z=f.size*(.7+.7*p);s.scale.set(z,z,1);s.material.opacity=Math.max(0,1-p*p);
+  });
+}
+function hudFxDraw(c,dt){
+  const now=performance.now();hfx=hfx.filter(f=>now-f.t0<f.life*1000);
+  for(const f of hfx){
+    const p=(now-f.t0)/(f.life*1000),im=asImg("fx_"+f.key);
+    c.save();c.globalAlpha=Math.max(0,1-p);
+    if(im){const fr=FXF[f.key]||1,fw=im.width/fr,i=Math.min(fr-1,Math.floor(p*fr));c.drawImage(im,i*fw,0,fw,im.height,0,0,HW,HH)}
+    else{const rgb=FXC[f.key]||"255,255,255",g=c.createRadialGradient(HW/2,HH/2,HH*.25,HW/2,HH/2,HH*.85);g.addColorStop(0,"rgba("+rgb+",0)");g.addColorStop(1,"rgba("+rgb+",.5)");c.fillStyle=g;c.fillRect(0,0,HW,HH)}
+    c.restore();
+  }
+  if(muz>0){
+    muz-=dt;
+    if(me.al&&FIREARM.includes(me.w)){c.save();c.globalAlpha=Math.min(1,muz*18);drawFx(c,"muzzle",1-muz/.07,780,365,130,130);c.restore()}
+  }
+}
+function remoteShot(d){
+  const dd=Math.hypot(d.x-me.x,d.y-me.y);
+  if(dd<900)sfxShot(d.w,.55*(1-dd/900));
+  if(FIREARM.includes(d.w)&&dd>30)fxw("muzzle",d.x+Math.cos(d.a)*24,d.y+Math.sin(d.a)*24,44,.1);
+}
+def("assets",0,"불러온 에셋(이미지·소리) 확인",()=>{
+  const im=Object.keys(AS),sn=Object.keys(SND),bad=im.filter(k=>AS[k]._t);
+  return "이미지 "+im.length+"개, 소리 "+sn.length+"개 불러옴\n"+(im.concat(sn).join(", ")||"(없음) assets 폴더에 파일을 넣어 주세요")+(bad.length?"\n[주의] 3D에서 못 쓰는 파일(보안 때문): "+bad.join(", ")+"\n→ 더블클릭이 아니라 GitHub Pages 같은 웹 주소로 열어야 3D에 적용돼요.":"");
+});
+
+const cvs=(w,h,fn)=>{const c=document.createElement("canvas");c.width=w;c.height=h;fn(c.getContext("2d"),w,h);return c};
+function wTex(k,w,h){const key="w"+k+w;if(T3.txt[key])return T3.txt[key];g3d=true;try{return T3.txt[key]=new THREE.CanvasTexture(cvs(w,h,g=>drawWeapon(g,k,w,h)))}finally{g3d=false}}
+function iTex(t,s){const key="i"+t+s;if(T3.txt[key])return T3.txt[key];g3d=true;try{return T3.txt[key]=new THREE.CanvasTexture(cvs(s,s,g=>drawItem(g,t,s)))}finally{g3d=false}}
+function drawWeapon(g,k,w,h){
+  {const im=asImg("weapon_"+k);if(im){imgFit(g,im,0,0,w,h);return}}
+  g.save();g.scale(w/100,h/50);g.lineJoin=g.lineCap="round";
+  const L=(a,b,y0,y1)=>{const q=g.createLinearGradient(0,y0,0,y1);q.addColorStop(0,a);q.addColorStop(1,b);return q};
+  const M=L("#cfd6df","#4a5463",8,42),D=L("#5b6676","#1a1f27",8,42),G=L("#ffd86b","#b8860b",8,42);
+  const P=(pts,f)=>{g.fillStyle=f;g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();g.fill()};
+  const Rc=(x,y,a,b,f)=>{g.fillStyle=f;g.fillRect(x,y,a,b)};
+  const Ci=(x,y,r,f)=>{g.fillStyle=f;g.beginPath();g.arc(x,y,r,0,7);g.fill()};
+  if(k==="gun"){
+    P([[3,19],[22,18],[22,32],[9,34],[3,29]],D);Rc(22,16,40,14,M);Rc(24,19,34,2,"#ff4655");Rc(62,19,22,9,D);Rc(84,21,13,4,M);Rc(95,20,3,6,"#222");
+    P([[40,30],[51,30],[53,45],[43,45]],D);P([[27,30],[35,30],[33,43],[25,43]],D);Rc(36,11,22,5,D);Rc(34,9,3,7,D);Rc(54,11,3,5,M);
+  }else if(k==="dagger"){
+    P([[38,22],[93,25],[38,28]],M);Rc(32,17,6,16,D);Rc(12,21,20,8,D);Ci(10,25,4,G);Rc(40,24.5,45,1,"#ffffff88");
+  }else if(k==="sword"){
+    P([[34,21],[97,25],[34,29]],M);Rc(28,14,6,22,G);Rc(10,22,18,6,D);Ci(8,25,4,G);Rc(36,24.5,55,1,"#ffffff88");
+  }else if(k==="bow"){
+    g.strokeStyle="#9a6a3a";g.lineWidth=4;g.beginPath();g.moveTo(52,2);g.quadraticCurveTo(14,25,52,48);g.stroke();
+    g.strokeStyle="#e5e7eb";g.lineWidth=1;g.beginPath();g.moveTo(52,2);g.lineTo(52,48);g.stroke();
+    g.strokeStyle="#cbd5e1";g.lineWidth=2;g.beginPath();g.moveTo(30,25);g.lineTo(94,25);g.stroke();P([[94,21],[100,25],[94,29]],M);P([[30,22],[24,25],[30,28]],"#ff4655");
+  }else if(k==="magic"){
+    Rc(6,24,66,4,L("#8b5a2b","#3f2a14",20,30));
+    const q=g.createRadialGradient(84,25,1,84,25,13);q.addColorStop(0,"#ffffff");q.addColorStop(.4,"#a78bfa");q.addColorStop(1,"rgba(99,102,241,0)");Ci(84,25,13,q);
+    g.strokeStyle=G;g.lineWidth=2;g.beginPath();g.arc(84,25,8,0,7);g.stroke();
+  }else if(k==="sup1"){
+    Rc(4,23.5,76,3,G);P([[78,25],[90,16],[86,24],[99,25],[84,35],[88,26]],"#fde047");Rc(30,20,3,10,D);
+  }else if(k==="sup2"){
+    Rc(8,15,70,17,L("#6b7a4b","#2d3520",15,32));Rc(76,17,12,13,D);P([[88,18],[98,24],[88,30]],"#ff4655");Rc(4,17,6,13,D);Rc(30,9,12,6,D);P([[34,32],[42,32],[40,45],[32,45]],D);Rc(52,12,3,4,M);
+  }else if(k==="sup3"){
+    for(let i=0;i<4;i++)Rc(48,15+i*4.5,50,3.2,M);Rc(40,12,14,26,D);Rc(8,18,34,14,L("#4b5563","#1f2937",18,32));Rc(14,10,22,8,D);P([[16,32],[24,32],[22,46],[14,46]],D);Rc(94,15,5,17,"#222");
+  }
+  g.restore();
+}
+function drawItem(g,t,s){
+  {const im=asImg("item_"+t);if(im){imgFit(g,im,0,0,s,s);return}}
+  const c=IT[t]?IT[t].c:"#fff",m=s/2;g.save();
+  const q=g.createRadialGradient(m,m,s*.1,m,m,s*.5);q.addColorStop(0,c+"cc");q.addColorStop(1,c+"00");g.fillStyle=q;g.beginPath();g.arc(m,m,s*.5,0,7);g.fill();
+  g.fillStyle="#0f1923";g.beginPath();g.arc(m,m,s*.34,0,7);g.fill();g.strokeStyle=c;g.lineWidth=s*.04;g.stroke();
+  g.translate(m,m);g.scale(s/100,s/100);g.fillStyle="#fff";g.strokeStyle="#fff";g.lineWidth=6;g.lineJoin=g.lineCap="round";
+  if(t==="spd"){[-14,2].forEach(o=>{g.beginPath();g.moveTo(o,-14);g.lineTo(o+14,0);g.lineTo(o,14);g.stroke()})}
+  else if(t==="shd"){g.beginPath();g.moveTo(0,-18);g.lineTo(15,-11);g.lineTo(13,6);g.quadraticCurveTo(10,15,0,20);g.quadraticCurveTo(-10,15,-13,6);g.lineTo(-15,-11);g.closePath();g.fill()}
+  else if(t==="hp"){g.fillRect(-5,-16,10,32);g.fillRect(-16,-5,32,10)}
+  else if(t==="pow"){g.beginPath();for(let i=0;i<16;i++){const a=i*Math.PI/8,r=i%2?8:19;g.lineTo(Math.cos(a)*r,Math.sin(a)*r)}g.closePath();g.fill()}
+  else{const o=g.createRadialGradient(-5,-6,2,0,0,16);o.addColorStop(0,"#fff");o.addColorStop(1,c);g.fillStyle=o;g.beginPath();g.arc(0,0,15,0,7);g.fill()}
+  g.restore();
+}
+const CC={fire:"#ff6a3d",wind:"#7ee8c9",forest:"#4caf50",water:"#3aa0ff",thunder:"#ffd93d",ice:"#9be3ff",poison:"#9be15d",shadow:"#a78bfa",earth:"#c19a6b",light:"#ffe9a3"};
+const SN={fire:"화염 폭발",wind:"질주",forest:"치유",water:"물 방패",thunder:"연쇄 번개",ice:"서리 파편",poison:"독 구름",shadow:"그림자 이동",earth:"지진파",light:"섬광"};
+function drawChar(g,k,s){
+  {const im=asImg("char_"+k);if(im){imgFit(g,im,0,0,s,s);return}}
+  const c=CC[k]||"#fff";
+  g.save();g.fillStyle="#0f1923";g.fillRect(0,0,s,s);g.strokeStyle=c;g.lineWidth=Math.max(2,s*.05);g.strokeRect(1,1,s-2,s-2);
+  g.translate(s/2,s/2);g.scale(s/100,s/100);g.fillStyle=c;g.strokeStyle=c;g.lineWidth=6;g.lineJoin=g.lineCap="round";
+  const poly=pts=>{g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();g.fill()};
+  if(k==="fire"){g.beginPath();g.moveTo(0,-34);g.bezierCurveTo(22,-10,30,6,18,22);g.bezierCurveTo(10,34,-10,34,-18,22);g.bezierCurveTo(-28,6,-12,-6,0,-34);g.fill();g.fillStyle="#0f1923";g.beginPath();g.moveTo(0,2);g.bezierCurveTo(10,12,8,26,0,26);g.bezierCurveTo(-8,26,-8,12,0,2);g.fill()}
+  else if(k==="wind"){for(let i=-1;i<=1;i++){g.beginPath();g.moveTo(-28,i*16);g.bezierCurveTo(-8,i*16-12,14,i*16+12,28,i*16-4);g.stroke()}}
+  else if(k==="forest"){poly([[0,-34],[22,-6],[-22,-6]]);poly([[0,-14],[28,14],[-28,14]]);g.fillRect(-4,14,8,18)}
+  else if(k==="water"){g.beginPath();g.moveTo(0,-34);g.bezierCurveTo(8,-14,26,0,26,16);g.bezierCurveTo(26,30,-26,30,-26,16);g.bezierCurveTo(-26,0,-8,-14,0,-34);g.fill()}
+  else if(k==="thunder"){poly([[8,-36],[-18,6],[-2,6],[-10,36],[20,-8],[4,-8]])}
+  else if(k==="ice"){for(let i=0;i<3;i++){g.save();g.rotate(i*Math.PI/3);g.beginPath();g.moveTo(0,-32);g.lineTo(0,32);g.moveTo(-8,-22);g.lineTo(0,-30);g.lineTo(8,-22);g.stroke();g.restore()}}
+  else if(k==="poison"){g.beginPath();g.arc(0,-4,26,0,7);g.fill();g.fillRect(-14,10,28,22);g.fillStyle="#0f1923";g.beginPath();g.arc(-10,-4,7,0,7);g.arc(10,-4,7,0,7);g.fill();g.fillRect(-2,6,4,8)}
+  else if(k==="shadow"){g.beginPath();g.arc(0,0,28,0,7);g.fill();g.fillStyle="#0f1923";g.beginPath();g.arc(12,-6,24,0,7);g.fill()}
+  else if(k==="earth"){poly([[-36,28],[-10,-14],[8,10],[18,-6],[36,28]])}
+  else{g.beginPath();g.arc(0,0,14,0,7);g.fill();for(let i=0;i<8;i++){g.save();g.rotate(i*Math.PI/4);g.beginPath();g.moveTo(0,-22);g.lineTo(0,-34);g.stroke();g.restore()}}
+  g.restore();
+}
+// ===== 발로란트 스타일 HUD =====
+const FNT='"Rajdhani","Noto Sans KR","Apple SD Gothic Neo",sans-serif';
+let toast={t:"",life:0},kf=[];
+function flash(t){toast.t=t;toast.life=2.2}
+function ap(c,x,y,w,h,k,fill,line){c.beginPath();c.moveTo(x+k,y);c.lineTo(x+w,y);c.lineTo(x+w-k,y+h);c.lineTo(x,y+h);c.closePath();if(fill){c.fillStyle=fill;c.fill()}if(line){c.strokeStyle=line;c.lineWidth=1.5;c.stroke()}}
+function tx(c,t,x,y,sz,al,co){c.font="700 "+sz+"px "+FNT;c.textAlign=al||"left";c.textBaseline="middle";c.fillStyle=co||"#ece8e1";c.fillText(t,x,y)}
+function mini(c){
+  const mw=170,mh=Math.round(170*AH/AW),x0=12,y0=12,s=mw/AW;
+  c.fillStyle="rgba(15,25,35,.82)";c.fillRect(x0,y0,mw,mh);
+  c.fillStyle="rgba(255,70,85,.45)";for(const [x,y,w,h] of MAP.hz)c.fillRect(x0+x*s,y0+y*s,w*s,h*s);
+  c.fillStyle="rgba(236,232,225,.45)";for(const [x,y,w,h] of MAP.w)c.fillRect(x0+x*s,y0+y*s,Math.max(2,w*s),Math.max(2,h*s));
+  for(const it of items){c.fillStyle=IT[it.t].c;c.fillRect(x0+it.x*s-2,y0+it.y*s-2,4,4)}
+  for(const p of room.peers()){
+    if(p.kind!=="viewer"||(p.isMe&&p.sameTab))continue;const q=p.presence;
+    if(!q||!q.al||q.hd||Math.hypot(q.x-me.x,q.y-me.y)>650)continue;
+    c.fillStyle="#ff4655";c.beginPath();c.arc(x0+q.x*s,y0+q.y*s,3.5,0,7);c.fill();
+  }
+  c.save();c.translate(x0+me.x*s,y0+me.y*s);c.rotate(me.a);c.fillStyle="#ece8e1";c.beginPath();c.moveTo(7,0);c.lineTo(-4,-4);c.lineTo(-4,4);c.closePath();c.fill();c.restore();
+  c.strokeStyle="#ff4655";c.lineWidth=1.5;c.strokeRect(x0,y0,mw,mh);
+}
+function drawHUD(dt){
+  const c=ctx,PX=HW/2;c.clearRect(0,0,HW,HH);hudFxDraw(c,dt);
+  if(me.hp<lastHp-.5)dmgT=.35;lastHp=me.hp;
+  if(dmgT>0){const g=c.createRadialGradient(PX,HH/2,HH*.3,PX,HH/2,HH*.85);g.addColorStop(0,"rgba(255,70,85,0)");g.addColorStop(1,"rgba(255,70,85,"+Math.min(.6,dmgT*1.8)+")");c.fillStyle=g;c.fillRect(0,0,HW,HH);dmgT-=dt}
+  toast.life-=dt;for(const e of kf)e.t-=dt;kf=kf.filter(e=>e.t>0);
+  if(me.al&&asImg("crosshair")){const ci=AS.crosshair,cw=Math.min(64,ci.width);c.drawImage(ci,PX-cw/2,280-cw/2,cw,cw)}
+  else if(me.al){
+    for(const st of ["rgba(0,0,0,.6)","#ece8e1"]){c.strokeStyle=st;c.lineWidth=st[0]==="r"?4:2;c.beginPath();c.moveTo(PX-14,280);c.lineTo(PX-6,280);c.moveTo(PX+6,280);c.lineTo(PX+14,280);c.moveTo(PX,266);c.lineTo(PX,274);c.moveTo(PX,286);c.lineTo(PX,294);c.stroke()}
+    c.fillStyle="#ff4655";c.fillRect(PX-1.5,278.5,3,3);
+  }
+  mini(c);
+  const rem=Math.max(0,Math.ceil(FIGHT-(performance.now()-t0)/1000));
+  ap(c,PX-62,8,124,38,8,"rgba(15,25,35,.88)","#ff4655");tx(c,String(Math.floor(rem/60)).padStart(2,"0")+":"+String(rem%60).padStart(2,"0"),PX,28,26,"center");
+  ap(c,PX-152,10,86,28,8,"rgba(15,25,35,.82)");tx(c,"킬 "+me.k,PX-109,25,17,"center","#ff4655");
+  ap(c,PX+66,10,86,28,8,"rgba(15,25,35,.82)");tx(c,"데스 "+me.d,PX+109,25,17,"center");
+  if(pop.life>0){c.save();c.globalAlpha=Math.min(1,pop.life);c.font="700 20px "+FNT;const tw=c.measureText(pop.t).width+44;
+    ap(c,PX-tw/2,58,tw,40,10,"rgba(15,25,35,.92)","#ff4655");tx(c,pop.t,PX,79,20,"center");c.restore()}
+  let ky=12;
+  for(const e of kf){
+    c.font="700 15px "+FNT;const a=c.measureText(e.k||"").width,b2=c.measureText(e.v).width,mid=e.w?62:(e.k?44:0),wd=a+b2+mid+34;
+    const x=HW-12-wd;ap(c,x,ky,wd,26,6,"rgba(15,25,35,.88)",e.me?"#ff4655":null);
+    tx(c,e.k||"",x+12,ky+14,15,"left",e.me?"#ff4655":"#ece8e1");
+    if(e.w){c.save();c.translate(x+12+a+8,ky+4);drawWeapon(c,e.w,46,18);c.restore()}else if(e.k)tx(c,"스킬",x+12+a+8,ky+14,13,"left","#8d98a4");
+    tx(c,e.v,x+wd-12,ky+14,15,"right");ky+=30;
+  }
+  const hpv=Math.max(0,Math.round(me.hp)),hx=14,hy=HH-78,low=hpv<30;
+  ap(c,hx,hy,200,66,10,"rgba(15,25,35,.88)");tx(c,String(hpv),hx+24,hy+30,44,"left",low?"#ff4655":"#ece8e1");
+  tx(c,"HP",hx+112,hy+16,14,"left","#8d98a4");c.fillStyle="#26323f";c.fillRect(hx+22,hy+52,160,5);c.fillStyle=low?"#ff4655":"#ece8e1";c.fillRect(hx+22,hy+52,1.6*hpv,5);
+  const bf=[];if(me.spd>0)bf.push("속도");if(me.inv>.5)bf.push("방어막");if(me.dbo>0)bf.push("파워");if(me.tf>0)bf.push("태풍");if(me.fv>0)bf.push("가호");if(me.slow>0)bf.push("감속");if(me.frz>0)bf.push("빙결");if(me.psn>0)bf.push("중독");
+  if(bf.length)tx(c,bf.join(" · "),hx+6,hy-10,14,"left","#ff4655");
+  const cd=chOf(me.ch).sc||SKCD,abs=[["SHIFT","구르기",me.dh/4,me.dh],["E",SN[me.ch],me.sk/cd,me.sk],["Q","궁극기",1-me.ug/100,0]];
+  abs.forEach((a,i)=>{
+    const x=PX-98+i*68,y=HH-90,rdy=a[2]<=0;
+    c.fillStyle="rgba(15,25,35,.92)";c.fillRect(x,y,60,60);
+    c.strokeStyle=rdy?(i===2?"#ff4655":"#ece8e1"):"#3a4856";c.lineWidth=2;c.strokeRect(x,y,60,60);
+    c.save();c.translate(x+10,y+10);
+    if(i===0){c.strokeStyle="#ece8e1";c.lineWidth=5;c.lineCap="round";c.beginPath();c.moveTo(6,6);c.lineTo(20,20);c.lineTo(6,34);c.moveTo(20,6);c.lineTo(34,20);c.lineTo(20,34);c.stroke()}
+    else drawChar(c,me.ch,40);
+    c.restore();
+    if(a[2]>0){c.fillStyle="rgba(0,0,0,.68)";c.fillRect(x,y,60,60*Math.min(1,a[2]))}
+    if(i===2)tx(c,me.ug>=100?"READY":Math.floor(me.ug)+"%",x+30,y+30,me.ug>=100?16:18,"center",me.ug>=100?"#ff4655":"#ece8e1");
+    else if(a[3]>0)tx(c,String(Math.ceil(a[3])),x+30,y+30,22,"center");
+    tx(c,a[0],x+6,y+9,11,"left","#8d98a4");tx(c,a[1],x+30,y+70,11,"center","#8d98a4");
+  });
+  const wx=HW-246,wy=HH-78,wk=WK.includes(me.w)?me.w:"dagger",wn=WN[wk]?WN[wk][cl(me.wl|0,1,3)-1]:W[wk].n;
+  ap(c,wx,wy,232,66,10,"rgba(15,25,35,.88)");
+  c.save();c.translate(wx+18,wy+10);drawWeapon(c,wk,112,46);c.restore();
+  tx(c,wn,wx+142,wy+24,17,"left");tx(c,"레벨",wx+142,wy+46,12,"left","#8d98a4");
+  for(let i=0;i<3;i++){c.fillStyle=i<me.wl?"#ff4655":"#26323f";c.fillRect(wx+176+i*14,wy+41,11,9)}
+  if(toast.life>0){c.save();c.globalAlpha=Math.min(1,toast.life*2);c.font="700 18px "+FNT;const tw=c.measureText(toast.t).width+44;
+    ap(c,PX-tw/2,HH-134,tw,34,8,"rgba(15,25,35,.92)","#ff4655");tx(c,toast.t,PX,HH-117,18,"center");c.restore()}
+  if(!me.al){c.fillStyle="rgba(15,25,35,.7)";c.fillRect(0,0,HW,HH);c.fillStyle="#ff4655";c.fillRect(0,HH/2-70,HW,3);c.fillRect(0,HH/2-18,HW,3);
+    tx(c,me.rq?"부활 퀴즈":"ELIMINATED",PX,HH/2-44,34,"center");if(!me.rq)tx(c,Math.max(1,Math.ceil(me.resp))+"초 뒤 부활 퀴즈",PX,HH/2-4,18,"center","#8d98a4")}
+  else if(document.pointerLockElement!==cv){ap(c,150,HH-122,600,28,8,"rgba(15,25,35,.85)");tx(c,"화면을 클릭하면 시점이 고정돼요 · ←→↑↓ 키로도 회전 · T 채팅",PX,HH-108,14,"center")}
+}
+function draw(dt){render3D();drawHUD(dt||.016)}
+// ===== CPU 대전 =====
+let bots=[],solo=false;
+const BD=[{n:"쉬움",err:.4,sp:140,fr:1.9},{n:"보통",err:.2,sp:185,fr:1.25},{n:"어려움",err:.07,sp:230,fr:.85}];
+const hostP=()=>{const h=room&&room.peers().find(p=>p.presence&&p.presence.host);return h?h.presence:{}};
+const angDiff=(a,b)=>((a-b+Math.PI*3)%(Math.PI*2))-Math.PI;
+function refreshBotPres(){for(const b of bots)b.pres={bot:1,n:b.n,c:b.c,x:Math.round(b.x),y:Math.round(b.y),hp:Math.max(0,Math.round(b.hp)),k:b.k,d:b.d,w:b.w,al:b.al,rd:1,a:+b.a.toFixed(2),ch:b.ch,wl:b.wl,sh:b.inv>0?1:0,hd:0,qs:0}}
+function syncBots(){
+  if(phase==="fight"||!room)return;
+  const n=cl(+hostP().bn|0,0,6),ks=Object.keys(CH);
+  while(bots.length<n){const i=bots.length+1;bots.push({id:"B"+i,n:"CPU "+i,c:(i*3+1)&7,ch:ks[rnd(ks.length)],w:"gun",wl:1,x:AW/2,y:AH/2,a:0,hp:100,al:0,k:0,d:0,cd:0,inv:0,resp:0,sd:1,st:0,pres:{}})}
+  bots.length=n;refreshBotPres();if(room.bc)room.bc();
+}
+function botSpawn(b){let n=0;do{b.x=60+rnd(AW-120);b.y=60+rnd(AH-120)}while((inWall(b.x,b.y,PR+8)||Math.hypot(b.x-me.x,b.y-me.y)<250)&&++n<40);b.hp=100;b.al=1;b.inv=1.5;b.cd=1}
+function resetBots(){const ws=["sword","bow","gun","magic"],hard=cl(+hostP().bd|0,0,2)===2,ks=Object.keys(CH);for(const b of bots){b.k=b.d=0;b.w=ws[rnd(4)];b.wl=hard?2:1;b.ch=ks[rnd(ks.length)];botSpawn(b)}refreshBotPres()}
+function botDie(b,killer,wk){b.al=0;b.d++;b.resp=3;room.emitAs(b.id,"kill",{to:killer,w:wk||""});if(killer){const ob=bots.find(x=>x.id===killer);if(ob&&ob!==b)ob.k++}}
+function botUpdate(dt){
+  const D=BD[cl(+hostP().bd|0,0,2)],ps=room.peers().filter(p=>p.kind==="viewer");
+  for(const b of bots){
+    if(!b.al){b.resp-=dt;if(b.resp<=0)botSpawn(b);continue}
+    b.cd-=dt;b.inv-=dt;b.st-=dt;
+    let tg=null,bd=1e9;
+    for(const p of ps){const q=(p.isMe&&p.sameTab)?me:p.presence;if(p.peer===b.id||!q||!q.al||q.hd)continue;const d=Math.hypot(q.x-b.x,q.y-b.y);if(d<bd){bd=d;tg={x:+q.x,y:+q.y}}}
+    const w=W[b.w],rg={sword:90,dagger:110,bow:420,gun:320,magic:380}[b.w]||250;
+    let mx=0,my=0;
+    if(tg){
+      const a=Math.atan2(tg.y-b.y,tg.x-b.x);b.a+=angDiff(a,b.a)*Math.min(1,dt*(3+D.sp/50));
+      if(bd>rg+60){mx=Math.cos(a);my=Math.sin(a)}else if(bd<rg-80){mx=-Math.cos(a);my=-Math.sin(a)}
+      if(b.st<=0){b.sd=Math.random()<.5?-1:1;b.st=1+Math.random()*2}
+      mx+=Math.cos(a+1.571)*b.sd*.6;my+=Math.sin(a+1.571)*b.sd*.6;
+      if(b.cd<=0&&bd<w.sp*w.life*.85&&Math.abs(angDiff(a,b.a))<.2+D.err){
+        b.cd=w.cd*D.fr*chOf(b.ch).cd*LV[b.wl].c;
+        room.emitAs(b.id,"shot",{x:Math.round(b.x),y:Math.round(b.y),a:+(b.a+(Math.random()-.5)*2*D.err).toFixed(3),w:b.w,ch:b.ch,bo:0,l:b.wl});
+      }
+    }
+    let ni=null,nd=1e9;for(const it of items){const d=Math.hypot(it.x-b.x,it.y-b.y);if(d<nd){nd=d;ni=it}}
+    if(ni&&(!tg||bd>600)&&nd<700){const a=Math.atan2(ni.y-b.y,ni.x-b.x);mx=Math.cos(a);my=Math.sin(a);b.a+=angDiff(a,b.a)*Math.min(1,dt*4)}
+    if(ni&&nd<PR+16){if(ni.t==="hp")b.hp=Math.min(100,b.hp+40);else if(ni.t==="shd")b.inv=Math.max(b.inv,4);else if(ni.t==="orb")b.wl=Math.min(3,b.wl+1);room.emitAs(b.id,"itk",{id:ni.id})}
+    if(mx||my){const l=Math.hypot(mx,my);b.x=cl(b.x+mx/l*D.sp*dt,PR,AW-PR);b.y=cl(b.y+my/l*D.sp*dt,PR,AH-PR);wallPush(b)}
+    if(b.inv<=0&&MAP.hz.some(([x,y,w2,h2])=>b.x>x&&b.x<x+w2&&b.y>y&&b.y<y+h2)){b.hp-=12*dt;if(b.hp<=0)botDie(b,null,"")}
+  }
+  for(const p of projs){
+    if(p.life<=0)continue;
+    for(const b of bots){
+      if(!b.al||b.inv>0||p.o===b.id||Math.hypot(p.x-b.x,p.y-b.y)>=PR+p.r)continue;
+      p.life=0;fxw("hit",p.x,p.y,50,.3);if(p.o===myId)sfx("snd_hit",.4);b.hp-=p.dmg*chOf(b.ch).tk;if(b.hp<=0)botDie(b,p.o,p.k);break;
+    }
+  }
+}
+// ===== 채팅 =====
+function chatAdd(name,c,text){
+  const L=$("chatlog"),d=document.createElement("div");d.className="cm";
+  if(name){const b=document.createElement("b");b.textContent=name+": ";b.style.color=col(c);d.appendChild(b)}
+  d.appendChild(document.createTextNode(text));L.appendChild(d);
+  while(L.children.length>30)L.removeChild(L.firstChild);
+  setTimeout(()=>d.classList.add("old"),12000);
+}
+let lastChat=0;
+function openChat(){if(document.exitPointerLock)document.exitPointerLock();$("chatw").classList.add("open");$("chatin").value="";$("chatin").focus()}
+function closeChat(){$("chatw").classList.remove("open");$("chatin").blur()}
+$("chatin").onkeydown=e=>{
+  if(e.key==="Escape")return closeChat();
+  if(e.key!=="Enter")return;
+  const t=$("chatin").value.trim().slice(0,80);closeChat();if(!t||!room)return;
+  if(t[0]==="/"){const r=runCmd(t);if(r)chatAdd("",0,""+r);return}
+  if(Date.now()-lastChat<700)return;lastChat=Date.now();
+  room.emit("chat",{t}).catch(()=>{});
+};
+function loop(t){
+  if(phase!=="fight")return;
+  const dt=Math.min(.05,(t-last)/1000);last=t;update(dt,t);draw(dt);raf=requestAnimationFrame(loop);
+}
+
+// ===== 입력 =====
+addEventListener("keydown",e=>{
+  if(e.target&&e.target.tagName==="INPUT")return;
+  if(/^Digit[1-4]$/.test(e.code)){const b=document.querySelectorAll("#quiz:not(.hide) .opt,#mq:not(.hide) .opt,#rq:not(.hide) .opt")[+e.code[5]-1];if(b)b.click();return}
+  if(e.code==="KeyM"&&!e.repeat){toggleMute();return}
+  if((e.code==="KeyT"||e.code==="Enter")&&room&&!e.repeat){e.preventDefault();openChat();return}
+  if(e.key==="/"&&!e.repeat){e.preventDefault();openCmd();return}
+  if(e.code==="ShiftLeft"||e.code==="ShiftRight"){roll();return}
+  if(e.code==="KeyE"&&phase==="fight"){skill();return}
+  if(e.code==="KeyH"&&!e.repeat){if(DEV)setDev(false);else if($("dv").classList.contains("hide"))devOpen();else $("dv").classList.add("hide");return}
+  if(e.code==="KeyQ"&&phase==="fight"){ult();return}
+  if(["KeyW","KeyA","KeyS","KeyD","Space","ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.code)){keys[e.code]=true;if(e.code==="Space"||e.code.startsWith("Arrow"))e.preventDefault()}
+});
+addEventListener("keyup",e=>{keys[e.code]=false});
+addEventListener("blur",()=>{keys={};mouse.down=false});
+const cv=$("cv");
+const pos=e=>{const r=cv.getBoundingClientRect();mouse.x=(e.clientX-r.left)*AW/r.width;mouse.y=(e.clientY-r.top)*AH/r.height};
+cv.addEventListener("pointermove",pos);
+cv.addEventListener("pointerdown",e=>{pos(e);if(e.button===2){skill();return}mouse.down=true;if(phase==="fight"&&cv.requestPointerLock&&document.pointerLockElement!==cv){try{const pr=cv.requestPointerLock();if(pr&&pr.catch)pr.catch(()=>{})}catch(err){}}});
+document.addEventListener("mousemove",e=>{if(document.pointerLockElement===cv&&phase==="fight"&&me.al){me.a+=e.movementX*.0025;pitch=cl(pitch-e.movementY*.0025,-1.2,1.2)}});
+addEventListener("pointerup",()=>{mouse.down=false});
+cv.addEventListener("contextmenu",e=>e.preventDefault());
+
+// ===== 방 만들기 / 입장 =====
+function wire(){
+  offs=[
+    room.on("shot",m=>{const d=m.data;if(m.sameTab||phase!=="fight"||!d||!W[d.w]||!isFinite(d.x)||!isFinite(d.y)||!isFinite(d.a))return;addProj(m.peer,d);remoteShot(d)}),
+    room.on("kill",m=>{if(m.data&&myId&&m.data.to===myId&&phase==="fight"){me.k++;me.ug=Math.min(100,me.ug+30);if(me.ch==="poison")me.hp=Math.min(100,me.hp+20);push({});sfx("snd_kill");flash("KO! +1킬")}}),
+    room.on("adm",admRecv),
+    room.on("isp",m=>{const d=m.data;if(m.sameTab||m.peer!=="H"||phase!=="fight"||!d||!hasK(IT,d.t)||!isFinite(d.x)||!isFinite(d.y))return;items.push({id:d.id,t:d.t,x:d.x,y:d.y,life:20})}),
+    room.on("itk",m=>{const d=m.data;if(m.sameTab||!d)return;{const it=items.find(i=>i.id===d.id);if(it)fxw("pickup",it.x,it.y,50,.4)}items=items.filter(i=>i.id!==d.id)}),
+    room.on("chat",m=>{const d=m.data;if(!d||typeof d.t!=="string")return;const p=room.peers().find(x=>x.peer===m.peer),q=p&&p.presence;chatAdd(String(q&&q.n||"?").slice(0,10),q&&q.c,d.t.slice(0,80))}),
+    room.on("kill",m=>{
+      const d=m.data;if(!d)return;
+      if(isHost&&!bots.some(x=>x.id===m.peer)){const ob=bots.find(x=>x.id===d.to);if(ob)ob.k++}
+      const nm=id=>{const p=room.peers().find(x=>x.peer===id);return p?String(p.presence.n||"?").slice(0,10):""};
+      const v=nm(m.peer);if(!v)return;
+      {const vp=room.peers().find(x=>x.peer===m.peer);if(vp&&vp.presence&&m.peer!==myId&&isFinite(vp.presence.x))fxw("death",+vp.presence.x,+vp.presence.y,120,.8)}
+      kf.push({k:d.to?nm(d.to):"",v,w:WK.includes(d.w)?d.w:"",me:d.to===myId?1:0,t:5});if(kf.length>5)kf.shift();
+    })
+  ];
+}
+async function leave(text){
+  offs.forEach(f=>f());offs=[];cancelAnimationFrame(raf);
+  if(room){try{await room.leave()}catch(e){}}
+  room=null;isHost=false;myId=null;curSeq=-1;bots=[];solo=false;$("admb").classList.add("hide");$("adm").classList.add("hide");$("chatw").classList.add("hide");phase="lobby";me=fresh();show("home");msg(text||"");
+}
+let busy=false;
+async function enterRoom(c,host,sl){if(busy)return;busy=true;try{await enterRoom0(c,host,sl)}finally{busy=false}}
+async function enterRoom0(c,host,sl){
+  const nick=($("nick").value.trim().slice(0,8))||("용사"+(1+rnd(99)));
+  msg("연결 중…");
+  try{room=sl?localRoom():await R.join("eng-"+c,host)}catch(e){
+    room=null;const ty=e&&e.type;
+    if(host&&ty==="unavailable-id")return enterRoom0(newCode(),true);
+    return msg(ty==="peer-unavailable"?"그런 방이 없어요. 코드를 다시 확인해 주세요.":"연결에 실패했어요. 학교·회사 같은 일부 네트워크는 방 만들기(WebRTC)를 막아요. CPU 대전은 언제나 가능해요.");
+  }
+  if(host){
+    await room.presence({host:1,phase:"lobby",seq:0,bn:sl?3:0,bd:1});seq=0;if(!sl)await sleep(900);
+    if(!sl&&room.peers().some(p=>p.presence.host&&!p.isMe)){try{await room.leave()}catch(e){}room=null;return enterRoom0(newCode(),true)}
+  }else{
+    let h=null;for(let i=0;i<80&&!h;i++){await sleep(100);h=room.peers().find(p=>p.presence.host)}
+    if(!h){try{await room.leave()}catch(e){}room=null;return msg("그런 방이 없어요. 코드를 다시 확인해 주세요.")}
+    if(h.presence.phase!=="lobby"){try{await room.leave()}catch(e){}room=null;return msg("이미 게임이 진행 중인 방이에요.")}
+  }
+  isHost=host;solo=!!sl;bots=[];if(host)room.xb=()=>bots.map(b=>[b.id,b.pres]);me=fresh();me.n=nick;me.c=rnd(8);curSeq=-1;phase="lobby";hostLost=0;warned=false;
+  $("rc").textContent=sl?"CPU":c.toUpperCase();$("rcl").textContent=sl?"혼자 연습 모드":"방 코드 · 친구에게 알려주세요";wire();push({});show("lobby");msg("");$("admb").classList.toggle("hide",!(host&&DEV));$("chatw").classList.remove("hide");$("chatlog").innerHTML="";
+  $("st").classList.toggle("hide",!host);$("lw").classList.toggle("hide",host);
+}
+const ALPHA="abcdefghjkmnpqrstuvwxyz23456789";
+const newCode=()=>Array.from({length:4},()=>ALPHA[rnd(ALPHA.length)]).join("");
+$("mk").onclick=()=>enterRoom(newCode(),true);
+$("solo").onclick=()=>enterRoom("cpu0",true,true);
+loadAssets();
+$("jn").onclick=()=>{const c=$("code").value.trim().toLowerCase();if(!/^[a-z0-9]{4}$/.test(c))return msg("방 코드는 4자리예요.");enterRoom(c,false)};
+$("st").onclick=()=>{if(isHost)setPhase("quiz")};
+$("again").onclick=()=>{if(isHost)setPhase("lobby")};
+$("lv").onclick=$("lv2").onclick=()=>leave("");
+
+// ===== 네트워크: PeerJS(WebRTC) 기반 방. 방장이 중계 서버 역할을 해요 =====
+const PRE="engbattle-";
+const PCFG={config:{iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"},{urls:"stun:global.stun.twilio.com:3478"},{urls:["turn:openrelay.metered.ca:80","turn:openrelay.metered.ca:443","turns:openrelay.metered.ca:443?transport=tcp"],username:"openrelayproject",credential:"openrelayproject"}]}};
+function localRoom(){
+  const H={};let mine={};
+  const fire=(t,d,from)=>(H[t]||[]).forEach(f=>f({topic:t,data:d,peer:from,sameTab:from==="H",isMe:from==="H",kind:"viewer"}));
+  const room={
+    presence:p=>{Object.assign(mine,p);return Promise.resolve()},
+    peers:()=>[{peer:"H",isMe:true,sameTab:true,kind:"viewer",presence:mine}].concat((room.xb?room.xb():[]).map(([id,p])=>({peer:id,isMe:false,sameTab:false,kind:"viewer",presence:p}))),
+    emit:(t,d)=>{fire(t,d,"H");return Promise.resolve()},emitAs:(f,t,d)=>fire(t,d,f),
+    on:(t,f)=>{(H[t]=H[t]||[]).push(f);return()=>{H[t]=H[t].filter(x=>x!==f)}},
+    leave:()=>Promise.resolve(),kick:()=>{},bc:()=>{}
+  };
+  return room;
+}
+R={join:(name,host)=>new Promise((res,rej)=>{
+  const code=name.replace("eng-","");
+  const peer=host?new Peer(PRE+code,PCFG):new Peer(undefined,PCFG);
+  const H={},conns={};let pres={},list=[],mine={},myId=host?"H":null,conn=null,bt=0;
+  const timer=setTimeout(()=>{rej({type:"timeout"});try{peer.destroy()}catch(e){}},15000);
+  const fire=(topic,d,from)=>(H[topic]||[]).forEach(f=>f({topic,data:d,peer:from,sameTab:from===myId,isMe:from===myId,kind:"viewer"}));
+  const snap=()=>Object.keys(pres).map(k=>[k,pres[k]]).concat(room.xb?room.xb():[]);
+  const bcast=()=>{if(bt)return;bt=setTimeout(()=>{bt=0;const m={t:"s",l:snap()};Object.values(conns).forEach(c=>c.open&&c.send(m))},40)};
+  const hostEmit=(from,topic,data)=>{const m={t:"e",from,topic,data};Object.values(conns).forEach(c=>c.open&&c.send(m));fire(topic,data,from)};
+  const room={
+    presence:p=>{Object.assign(mine,p);
+      if(host){pres.H=Object.assign({},mine);bcast()}else if(conn&&conn.open)conn.send({t:"p",p});
+      return Promise.resolve()},
+    peers:()=>{
+      const out=(host?snap():list).map(([id,p])=>({peer:id,isMe:id===myId,sameTab:id===myId,kind:"viewer",presence:id===myId?mine:p}));
+      if(myId&&!out.some(o=>o.isMe))out.push({peer:myId,isMe:true,sameTab:true,kind:"viewer",presence:mine});
+      return out},
+    emit:(topic,data)=>{if(host)hostEmit("H",topic,data);else if(conn&&conn.open)conn.send({t:"e",topic,data});return Promise.resolve()},
+    emitAs:(from,topic,data)=>{if(host)hostEmit(from,topic,data)},bc:bcast,
+    on:(topic,fn)=>{(H[topic]=H[topic]||[]).push(fn);return()=>{H[topic]=H[topic].filter(f=>f!==fn)}},
+    kick:id=>{const c=conns[id];if(c){try{c.close()}catch(e){}delete conns[id];delete pres[id];bcast()}},
+    leave:()=>{try{peer.destroy()}catch(e){}return Promise.resolve()}
+  };
+  peer.on("error",e=>{clearTimeout(timer);rej(e)});
+  if(host){
+    peer.on("open",()=>{clearTimeout(timer);pres.H={};res(room)});
+    peer.on("connection",c=>{
+      conns[c.peer]=c;
+      c.on("open",()=>{pres[c.peer]=pres[c.peer]||{};bcast()});
+      c.on("data",m=>{
+        if(!m)return;
+        if(m.t==="p"&&m.p&&typeof m.p==="object"){delete m.p.host;delete m.p.phase;delete m.p.seq;pres[c.peer]=Object.assign(pres[c.peer]||{},m.p);bcast()}
+        else if(m.t==="e"&&typeof m.topic==="string")hostEmit(c.peer,m.topic,m.data);
+      });
+      c.on("close",()=>{delete conns[c.peer];delete pres[c.peer];bcast()});
+    });
+  }else{
+    peer.on("open",id=>{
+      myId=id;conn=peer.connect(PRE+code,{reliable:true});
+      conn.on("open",()=>{clearTimeout(timer);res(room)});
+      conn.on("data",m=>{if(!m)return;if(m.t==="s")list=m.l;else if(m.t==="e")fire(m.topic,m.data,m.from)});
+      conn.on("close",()=>{list=[]});
+    });
+  }
+})};
+$("solo").disabled=false;
+if(!window.Peer)msg("방 만들기는 인터넷 연결이 필요해요. CPU 대전은 바로 할 수 있어요.");
+else{$("mk").disabled=$("jn").disabled=false;msg("")}
+})();
+</script>
+</body>
+</html>
